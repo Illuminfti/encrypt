@@ -622,7 +622,7 @@ export default function ArchitectureFlow() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6, ease }}
-          className="font-display font-bold text-3xl md:text-4xl lg:text-5xl text-cloud text-left mb-4 leading-[1.1]"
+          className="font-display font-bold text-3xl md:text-4xl lg:text-display-md text-cloud text-left mb-4 leading-[1.1]"
         >
           {architecture.headline}
         </motion.h2>

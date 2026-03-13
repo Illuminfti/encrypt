@@ -207,7 +207,7 @@ export default function AudienceTabs() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.7, ease }}
-          className="font-display font-bold text-3xl md:text-4xl lg:text-5xl text-cloud text-center mb-16 lg:mb-20 leading-[1.1]"
+          className="font-display font-bold text-3xl md:text-4xl lg:text-display-md text-cloud text-center mb-16 lg:mb-20 leading-[1.1]"
         >
           {audience.headline}
         </motion.h2>

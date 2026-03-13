@@ -75,7 +75,7 @@ export default function UseCaseGrid() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6, ease }}
-          className="font-display font-bold text-3xl md:text-4xl lg:text-5xl text-cloud leading-[1.1] text-center"
+          className="font-display font-bold text-3xl md:text-4xl lg:text-display-md text-cloud leading-[1.1] text-center"
         >
           {useCases.headline}
         </motion.h2>

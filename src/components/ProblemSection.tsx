@@ -320,7 +320,7 @@ export default function ProblemSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.6, delay: 0.08, ease }}
-            className="font-display font-bold text-3xl md:text-4xl lg:text-5xl text-cloud leading-[1.1]"
+            className="font-display font-bold text-3xl md:text-4xl lg:text-display-md text-cloud leading-[1.1]"
           >
             {problem.headline}
           </motion.h2>

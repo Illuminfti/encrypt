@@ -33,12 +33,9 @@ body {
   color: var(--cloud);
 }
 
-/* ── Scrollbar ──────────────────────────────────────────────── */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: var(--void); }
-::-webkit-scrollbar-thumb { background: rgba(122, 92, 255, 0.25); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(122, 92, 255, 0.4); }
-* { scrollbar-width: thin; scrollbar-color: rgba(122, 92, 255, 0.25) var(--void); }
+/* ── Scrollbar (hidden for immersive feel, like sui.io/solana.com) ── */
+::-webkit-scrollbar { display: none; }
+* { scrollbar-width: none; -ms-overflow-style: none; }
 
 /* ── Glass ──────────────────────────────────────────────────── */
 .glass {
