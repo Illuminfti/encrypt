@@ -1,85 +1,121 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Eye, Database, Wifi } from "lucide-react";
+import { problem } from "@/content/home";
 
-const cards = [
-  {
-    icon: Eye,
-    title: "Public execution leaks strategy",
-    description:
-      "Every transaction is visible before and after settlement. Strategies, logic, and intent are exposed to the entire network.",
-  },
-  {
-    icon: Database,
-    title: "Public state leaks user data",
-    description:
-      "On-chain state is globally readable. Balances, positions, and behavioral patterns are open to anyone watching.",
-  },
-  {
-    icon: Wifi,
-    title: "API-connected apps leak secrets offchain",
-    description:
-      "Interacting with external APIs exposes payloads, credentials, and data to intermediaries and observers.",
-  },
-];
+const ease = [0.22, 1, 0.36, 1] as const;
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.15 },
-  },
-};
+/* ── Mini SVG motifs (NOT lucide) ─────────────────────── */
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 32 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
-  },
-};
+function EyeMotif() {
+  return (
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden>
+      <circle cx="14" cy="14" r="8" stroke="currentColor" strokeWidth="1" opacity="0.35" />
+      <circle cx="14" cy="14" r="3.5" stroke="currentColor" strokeWidth="1" opacity="0.5" />
+      <line x1="3" y1="14" x2="25" y2="14" stroke="currentColor" strokeWidth="0.75" opacity="0.25" />
+    </svg>
+  );
+}
+
+function GridMotif() {
+  return (
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden>
+      {[0, 1, 2, 3].map((row) =>
+        [0, 1, 2, 3].map((col) => (
+          <circle
+            key={`${row}-${col}`}
+            cx={7 + col * 5}
+            cy={7 + row * 5}
+            r="1.2"
+            fill="currentColor"
+            opacity="0.4"
+          />
+        ))
+      )}
+    </svg>
+  );
+}
+
+function WaveMotif() {
+  return (
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden>
+      <path d="M6 14 Q10 8 14 14 Q18 20 22 14" stroke="currentColor" strokeWidth="1" opacity="0.4" fill="none" />
+      <path d="M6 10 Q10 4 14 10 Q18 16 22 10" stroke="currentColor" strokeWidth="0.75" opacity="0.3" fill="none" />
+      <path d="M6 18 Q10 12 14 18 Q18 24 22 18" stroke="currentColor" strokeWidth="0.75" opacity="0.3" fill="none" />
+    </svg>
+  );
+}
+
+const motifs = [EyeMotif, GridMotif, WaveMotif];
 
 export default function ProblemSection() {
   return (
-    <section className="relative py-24 md:py-32">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
+    <section id="problem" className="py-24 lg:py-36">
+      <div className="max-w-content mx-auto px-6 lg:px-8">
+        {/* Header — left aligned */}
+        <motion.p
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] as const }}
-          className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-16 text-balance"
+          transition={{ duration: 0.6, ease }}
+          className="text-xs uppercase tracking-widest text-signal-coral mb-4"
         >
-          Everything composable.{" "}
-          <span className="text-signal-coral">Everything visible.</span>
+          {problem.eyebrow}
+        </motion.p>
+
+        <motion.h2
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.6, delay: 0.08, ease }}
+          className="font-display font-bold text-3xl md:text-4xl text-cloud max-w-lg"
+        >
+          {problem.headline}
         </motion.h2>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-60px" }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6"
+        <motion.p
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.6, delay: 0.16, ease }}
+          className="text-lg text-mist mt-4 max-w-lg"
         >
-          {cards.map((card) => (
-            <motion.div
-              key={card.title}
-              variants={cardVariants}
-              className="group relative bg-abyss border border-white/5 rounded-2xl p-8 transition-all duration-300 hover:border-signal-coral/30 hover:shadow-[0_0_40px_-12px_rgba(255,142,114,0.15)]"
-            >
-              <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-signal-coral/10 mb-6 group-hover:bg-signal-coral/15 transition-colors">
-                <card.icon className="w-6 h-6 text-signal-coral" />
-              </div>
-              <h3 className="font-display text-xl font-semibold text-cloud mb-3">
-                {card.title}
-              </h3>
-              <p className="text-mist text-sm leading-relaxed">
-                {card.description}
-              </p>
-            </motion.div>
-          ))}
-        </motion.div>
+          {problem.body}
+        </motion.p>
+
+        {/* Cards — asymmetric 12-col grid */}
+        <div className="mt-16 grid grid-cols-1 lg:grid-cols-12 gap-5">
+          {problem.cards.map((card, i) => {
+            const Motif = motifs[i];
+            const span =
+              i === 0
+                ? "lg:col-span-5 lg:row-span-2"
+                : "lg:col-span-7";
+
+            return (
+              <motion.div
+                key={card.title}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.6, delay: i * 0.08, ease }}
+                className={`relative rounded-3xl bg-abyss/60 border border-white/[0.06] p-8 lg:p-10 hover:border-signal-coral/20 transition-colors duration-300 ${span}`}
+              >
+                {/* Mini SVG in top-right */}
+                <div className="absolute top-6 right-6 text-signal-coral">
+                  <Motif />
+                </div>
+
+                <h3 className="font-display font-semibold text-lg text-cloud mb-3">
+                  {card.title}
+                </h3>
+                <p className="text-sm text-mist leading-relaxed max-w-[320px]">
+                  {card.body}
+                </p>
+              </motion.div>
+            );
+          })}
+        </div>
       </div>
     </section>
   );

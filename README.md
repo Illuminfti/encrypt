@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Encrypt
 
-## Getting Started
+Marketing website for **Encrypt** — a confidential execution network for Solana.
 
-First, run the development server:
+Built on RE-FHE and threshold-FHE research from dWallet Labs. Sister network to [Ika](https://ika.xyz).
+
+## Run locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Route map
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Route | Purpose |
+|-------|---------|
+| `/` | Homepage — hero, problem/solution, RE-FHE, use cases, FHE-TLS, architecture, audience, research, CTA |
+| `/developers` | Builder landing page — primitives, illustrative API, integration checklist |
+| `/research` | RE-FHE, threshold-FHE, security model, FAQ |
+| `/ecosystem` | Category cards and design partner opportunity |
+| `/blog` | Placeholder hub with foundational brief cards |
 
-## Learn More
+## Where things live
 
-To learn more about Next.js, take a look at the following resources:
+### Content
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+All marketing copy is centralized in typed content files:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| File | What it controls |
+|------|-----------------|
+| `src/lib/site-config.ts` | External URLs, feature flags, metadata |
+| `src/content/navigation.ts` | Nav links and CTAs (config-driven) |
+| `src/content/home.ts` | All homepage section content |
+| `src/content/pages.ts` | Developers, research, ecosystem, blog page content |
+| `src/content/footer.ts` | Footer columns, social links, brand block |
 
-## Deploy on Vercel
+### External URLs
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+All external URLs are configured in `src/lib/site-config.ts` under `siteConfig.urls`. If a URL is set to `undefined`, the corresponding link is automatically hidden from navigation and footer.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```ts
+urls: {
+  docs: undefined,         // Set to enable "Docs" in nav
+  github: "https://...",
+  x: "https://...",
+  discord: undefined,      // Set to show Discord link
+  waitlist: undefined,     // Set to show waitlist CTA
+  // ...
+}
+```
+
+### Future additions
+
+- **Benchmarks**: Add to `/research` page via `researchPage.benchmarks` in `src/content/pages.ts`. The homepage benchmark card is already labeled "Coming soon" and will link through once content exists.
+- **Partner logos**: Add to ecosystem categories in `src/content/pages.ts` → `ecosystemPage.categories`. The current cards show "Design partner opportunity" status.
+- **Real blog posts**: Replace placeholder posts in `src/content/pages.ts` → `blogPage.posts`. Add slug routing in `src/app/blog/[slug]/page.tsx` when ready.
+- **SDK docs**: Set `siteConfig.urls.docs` to a real URL to enable "Docs" links across the site.
+
+### OG image
+
+Generated at `src/app/opengraph-image.tsx` using Next.js ImageResponse. Features the Encrypt wordmark, 64-cell word bar motif, and Veilray silhouette on a dark gradient.
+
+## Tech stack
+
+- Next.js 14 (App Router)
+- TypeScript
+- Tailwind CSS
+- Framer Motion
+- Deployed on Vercel
+
+## Design system
+
+- **Colors**: void, abyss, ultraviolet, cipher-mint, prism-cyan, signal-coral, cloud, mist
+- **Typography**: Space Grotesk (display), Manrope (body)
+- **Max widths**: 1440px shell, 1200px content
+- **Section padding**: 96–144px desktop, 72–96px mobile
+- **Card radius**: 24px
+- **Border**: rgba(255,255,255,0.08)

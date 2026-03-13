@@ -1,42 +1,30 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
+import { credibilityBadges } from "@/content/home";
 
-interface BadgeRowProps {
-  badges: string[];
-}
+const ease = [0.22, 1, 0.36, 1] as const;
 
-export default function BadgeRow({ badges }: BadgeRowProps) {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-40px" });
-
+export default function BadgeRow() {
   return (
-    <div
-      ref={ref}
-      className="flex gap-3 overflow-x-auto scrollbar-hide py-1 -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap sm:overflow-visible"
-    >
-      {badges.map((badge, index) => (
-        <motion.span
-          key={badge}
-          initial={{ opacity: 0, y: 12 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
-          transition={{
-            duration: 0.4,
-            delay: index * 0.06,
-            ease: [0.21, 0.47, 0.32, 0.98],
-          }}
-          className="
-            shrink-0 rounded-full border border-white/10 bg-white/[0.05]
-            px-4 py-2 text-sm text-mist
-            transition-all duration-200
-            hover:border-white/20 hover:bg-white/[0.08]
-            hover:shadow-[0_0_16px_-4px_rgba(122,92,255,0.2)]
-          "
-        >
-          {badge}
-        </motion.span>
-      ))}
-    </div>
+    <section id="credibility" className="py-12 border-y border-white/[0.04]">
+      <div className="max-w-content mx-auto px-6 lg:px-8">
+        {/* Mobile: horizontal scroll; Desktop: flex-wrap centered */}
+        <div className="flex gap-3 flex-nowrap overflow-x-auto scrollbar-hide sm:flex-wrap sm:justify-center sm:overflow-visible">
+          {credibilityBadges.map((badge, i) => (
+            <motion.span
+              key={badge}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.6, delay: i * 0.05, ease }}
+              className="shrink-0 text-xs text-mist/80 px-4 py-2 rounded-full border border-white/[0.06] bg-white/[0.02]"
+            >
+              {badge}
+            </motion.span>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }

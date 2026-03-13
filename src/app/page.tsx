@@ -14,19 +14,10 @@ import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen overflow-hidden">
+    <main className="relative min-h-screen">
       <Navbar />
       <HeroSection />
-      <BadgeRow
-        badges={[
-          "Built on RE-FHE",
-          "Solana-aligned",
-          "Confidential compute",
-          "Verifiable API actions",
-          "Sister network to Ika",
-          "Research-led architecture",
-        ]}
-      />
+      <BadgeRow />
       <ProblemSection />
       <SolutionSection />
       <ReFHESection />
@@ -35,11 +26,7 @@ export default function Home() {
       <ArchitectureFlow />
       <AudienceTabs />
       <ResearchGrid />
-      <CTASection
-        headline="Build the first Solana apps that can keep a secret."
-        primaryCTA={{ label: "Build with Encrypt", href: "/developers" }}
-        secondaryCTA={{ label: "Read Research", href: "/research" }}
-      />
+      <CTASection />
       <Footer />
     </main>
   );

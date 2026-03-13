@@ -1,47 +1,38 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, Manrope } from "next/font/google";
+import { siteConfig } from "@/lib/site-config";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-space-grotesk",
   display: "swap",
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700"],
 });
 
 const manrope = Manrope({
   subsets: ["latin"],
   variable: "--font-manrope",
   display: "swap",
-  weight: ["300", "400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
-  title: "Encrypt | Confidential Execution for Solana",
-  description:
-    "Encrypt brings confidential execution to Solana through RE-FHE and FHE-TLS, enabling private DeFi, sealed auctions, encrypted AI inference, and trustless data access without compromising speed or composability.",
-  keywords: [
-    "Encrypt",
-    "FHE",
-    "Fully Homomorphic Encryption",
-    "Solana",
-    "Confidential Execution",
-    "RE-FHE",
-    "FHE-TLS",
-    "Private DeFi",
-    "Web3 Privacy",
-  ],
+  metadataBase: new URL(siteConfig.metadata.url),
+  title: siteConfig.metadata.title,
+  description: siteConfig.metadata.description,
+  alternates: { canonical: "/" },
   openGraph: {
-    title: "Encrypt | Confidential Execution for Solana",
-    description:
-      "Encrypt brings confidential execution to Solana through RE-FHE and FHE-TLS, enabling private DeFi, sealed auctions, encrypted AI inference, and trustless data access.",
+    title: siteConfig.metadata.title,
+    description: siteConfig.metadata.description,
+    url: siteConfig.metadata.url,
+    siteName: siteConfig.name,
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Encrypt | Confidential Execution for Solana",
-    description:
-      "Confidential execution for Solana. Private DeFi, sealed auctions, encrypted AI inference.",
+    title: siteConfig.metadata.title,
+    description: siteConfig.metadata.description,
   },
 };
 
@@ -55,7 +46,6 @@ export default function RootLayout({
       <body
         className={`${spaceGrotesk.variable} ${manrope.variable} font-body antialiased`}
       >
-        <div className="noise-overlay" aria-hidden="true" />
         {children}
       </body>
     </html>

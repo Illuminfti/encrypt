@@ -3,26 +3,26 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
-import Link from "next/link";
+import { ecosystemPage } from "@/content/pages";
 
-const fade = {
-  hidden: { opacity: 0, y: 24 },
-  show: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.08, duration: 0.5, ease: "easeOut" as const },
-  }),
-};
+const ease = [0.22, 1, 0.36, 1] as const;
 
-const categories = [
-  { label: "DeFi", gradient: "from-ultraviolet/20 to-prism-cyan/20" },
-  { label: "Infrastructure", gradient: "from-cipher-mint/20 to-ultraviolet/20" },
-  { label: "Gaming", gradient: "from-signal-coral/20 to-ultraviolet/20" },
-  { label: "Identity", gradient: "from-prism-cyan/20 to-cipher-mint/20" },
-  { label: "Enterprise", gradient: "from-ultraviolet/20 to-signal-coral/20" },
-  { label: "Research", gradient: "from-cipher-mint/20 to-prism-cyan/20" },
-];
+function fadeUp(delay: number) {
+  return {
+    initial: { opacity: 0, y: 20 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true },
+    transition: { duration: 0.6, ease, delay },
+  };
+}
+
+function animateUp(delay: number) {
+  return {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.6, ease, delay },
+  };
+}
 
 export default function EcosystemPage() {
   return (
@@ -30,105 +30,70 @@ export default function EcosystemPage() {
       <Navbar />
 
       {/* Hero */}
-      <section className="relative pt-32 pb-20 sm:pt-40 sm:pb-28 overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-prism-cyan/10 blur-[120px] pointer-events-none" />
-
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="flex items-center gap-2 mb-6"
+      <section className="py-32 lg:py-40">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <motion.span
+            {...animateUp(0)}
+            className="text-sm font-medium text-cipher-mint tracking-wide uppercase mb-4 block"
           >
-            <Sparkles size={18} className="text-prism-cyan" />
-            <span className="text-sm font-medium text-prism-cyan tracking-wide uppercase">
-              Ecosystem
-            </span>
-          </motion.div>
+            {ecosystemPage.eyebrow}
+          </motion.span>
 
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-cloud leading-tight max-w-3xl"
+            {...animateUp(0.1)}
+            className="font-display font-bold text-4xl md:text-5xl text-cloud max-w-3xl"
           >
-            Ecosystem
+            {ecosystemPage.headline}
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-5 text-lg sm:text-xl text-mist max-w-2xl leading-relaxed"
+            {...animateUp(0.2)}
+            className="text-lg text-mist mt-4 max-w-xl"
           >
-            Projects and partners building on Encrypt
+            {ecosystemPage.subheadline}
           </motion.p>
         </div>
       </section>
 
-      {/* Grid */}
-      <section className="py-20 sm:py-28">
+      {/* Category cards */}
+      <section className="py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {categories.map((cat, i) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {ecosystemPage.categories.map((cat, i) => (
               <motion.div
-                key={cat.label}
-                custom={i}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true }}
-                variants={fade}
-                className="group relative rounded-2xl p-[1px] overflow-hidden"
+                key={cat.title}
+                {...fadeUp(i * 0.08)}
+                className="rounded-3xl bg-abyss/40 border border-white/[0.06] p-7 transition-colors hover:border-ultraviolet/15"
               >
-                {/* Gradient border */}
-                <div
-                  className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${cat.gradient} opacity-40 group-hover:opacity-70 transition-opacity`}
-                />
-
-                {/* Card inner */}
-                <div className="relative rounded-2xl bg-abyss/90 p-8 h-full flex flex-col items-center justify-center text-center min-h-[220px]">
-                  <span className="inline-flex items-center gap-2 rounded-full bg-white/[0.04] border border-white/[0.06] px-3 py-1 text-xs font-medium text-mist mb-5">
-                    {cat.label}
-                  </span>
-                  <h3 className="font-display text-lg font-semibold text-cloud/60 mb-2">
-                    Ecosystem slot
-                  </h3>
-                  <p className="text-sm text-mist/50">Coming soon</p>
-                </div>
+                <span className="text-[10px] uppercase tracking-wider text-cipher-mint/60 bg-cipher-mint/5 px-2 py-1 rounded mb-4 inline-block">
+                  {cat.status}
+                </span>
+                <h3 className="font-display font-semibold text-lg text-cloud mb-2">
+                  {cat.title}
+                </h3>
+                <p className="text-sm text-mist leading-relaxed mb-3">
+                  {cat.body}
+                </p>
+                <p className="text-xs text-mist/50 italic">{cat.example}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Aspirational / Join */}
-      <section className="py-20 sm:py-28">
+      {/* Closing panel */}
+      <section className="py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="relative rounded-2xl border border-ultraviolet/20 bg-gradient-to-br from-ultraviolet/[0.06] to-transparent p-10 sm:p-16 text-center overflow-hidden"
+            {...fadeUp(0)}
+            className="rounded-3xl bg-abyss/40 border border-white/[0.06] p-10 max-w-2xl"
           >
-            {/* Subtle glow */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[300px] rounded-full bg-ultraviolet/10 blur-[100px] pointer-events-none" />
-
-            <div className="relative">
-              <h2 className="font-display text-3xl sm:text-4xl font-bold text-cloud mb-5">
-                Join the ecosystem
-              </h2>
-              <p className="text-mist max-w-xl mx-auto leading-relaxed mb-10">
-                Encrypt enables an entirely new class of applications on Solana -- from confidential DeFi to private identity systems, sealed-bid auctions, and encrypted data marketplaces. If you are building something that needs confidential execution, we want to hear from you.
-              </p>
-              <Link
-                href="#"
-                className="inline-flex items-center gap-2 rounded-lg bg-ultraviolet px-6 py-3 text-sm font-medium text-white transition-all hover:bg-ultraviolet/85 hover:shadow-[0_0_24px_rgba(122,92,255,0.3)]"
-              >
-                Apply to join
-                <ArrowRight size={16} />
-              </Link>
-            </div>
+            <h2 className="font-display font-semibold text-2xl text-cloud mb-4">
+              {ecosystemPage.closingPanel.headline}
+            </h2>
+            <p className="text-base text-mist">
+              {ecosystemPage.closingPanel.body}
+            </p>
           </motion.div>
         </div>
       </section>

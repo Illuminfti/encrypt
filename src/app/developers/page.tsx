@@ -3,325 +3,229 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
-import {
-  Lock,
-  Database,
-  Scale,
-  Eye,
-  Zap,
-  ArrowRight,
-  Terminal,
-  ChevronRight,
-} from "lucide-react";
 import Link from "next/link";
+import { developersPage } from "@/content/pages";
 
-const fade = {
-  hidden: { opacity: 0, y: 24 },
-  show: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.08, duration: 0.5, ease: "easeOut" as const },
-  }),
-};
+const ease = [0.22, 1, 0.36, 1] as const;
 
-const primitives = [
-  {
-    icon: Lock,
-    title: "Encrypted inputs",
-    description: "Submit data that only the program can decrypt",
-  },
-  {
-    icon: Database,
-    title: "Encrypted state",
-    description: "Store application state that remains confidential",
-  },
-  {
-    icon: Scale,
-    title: "Comparisons",
-    description: "Evaluate conditions on encrypted values without decryption",
-  },
-  {
-    icon: Eye,
-    title: "Policy-based reveal",
-    description: "Define who sees what, and when",
-  },
-  {
-    icon: Zap,
-    title: "API actions",
-    description: "Read and write to external APIs through encrypted channels",
-  },
-];
+function fadeUp(delay: number) {
+  return {
+    initial: { opacity: 0, y: 20 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true },
+    transition: { duration: 0.6, ease, delay },
+  };
+}
 
-const codeLines = [
-  '// SDK coming soon',
-  '',
-  'import { EncryptClient } from "@aspect/encrypt-sdk";',
-  'import { Connection } from "@solana/web3.js";',
-  '',
-  'const client = new EncryptClient({',
-  '  connection: new Connection("https://api.mainnet-beta.solana.com"),',
-  '  programId: ENCRYPT_PROGRAM_ID,',
-  '});',
-  '',
-  '// Submit encrypted input to a confidential program',
-  'const tx = await client.submitEncrypted({',
-  '  data: sensitivePayload,',
-  '  policy: "owner-only",',
-  '});',
-];
+function animateUp(delay: number) {
+  return {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.6, ease, delay },
+  };
+}
 
-const archBoxes = [
-  { label: "Your dApp", sublabel: "Solana program" },
-  { label: "Encrypt Runtime", sublabel: "Confidential execution" },
-  { label: "Solana L1", sublabel: "Public settlement" },
-];
+const keywords = new Set([
+  "const",
+  "await",
+  "import",
+  "from",
+  "new",
+  "async",
+  "function",
+  "return",
+  "let",
+  "var",
+]);
+
+function renderToken(token: string, idx: number) {
+  if (keywords.has(token)) {
+    return (
+      <span key={idx} className="text-ultraviolet/80">
+        {token}
+      </span>
+    );
+  }
+  if (/^["'].*["']/.test(token)) {
+    return (
+      <span key={idx} className="text-cipher-mint/80">
+        {token}
+      </span>
+    );
+  }
+  return <span key={idx}>{token}</span>;
+}
+
+function renderCodeLine(line: string) {
+  if (!line) return "\u00A0";
+  if (line.trimStart().startsWith("//")) {
+    return <span className="text-mist/40">{line}</span>;
+  }
+
+  // Tokenize: split on word boundaries and string literals
+  const parts = line.match(/"[^"]*"|'[^']*'|[a-zA-Z_$]+|[^a-zA-Z_$"']+/g) || [
+    line,
+  ];
+
+  return (
+    <span className="text-cloud/80">
+      {parts.map((part, i) => renderToken(part, i))}
+    </span>
+  );
+}
 
 export default function DevelopersPage() {
+  const { primaryCTA, secondaryCTA } = developersPage;
+
   return (
     <div className="min-h-screen bg-void">
       <Navbar />
 
       {/* Hero */}
-      <section className="relative pt-32 pb-20 sm:pt-40 sm:pb-28 overflow-hidden">
-        {/* Glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-ultraviolet/15 blur-[120px] pointer-events-none" />
-
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="flex items-center gap-2 mb-6"
+      <section className="py-32 lg:py-40">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <motion.span
+            {...animateUp(0)}
+            className="text-sm font-medium text-cipher-mint tracking-wide uppercase mb-4 block"
           >
-            <Terminal size={18} className="text-cipher-mint" />
-            <span className="text-sm font-medium text-cipher-mint tracking-wide uppercase">
-              Developer Preview
-            </span>
-          </motion.div>
+            {developersPage.eyebrow}
+          </motion.span>
 
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-cloud leading-tight max-w-3xl"
+            {...animateUp(0.1)}
+            className="font-display font-bold text-4xl md:text-5xl text-cloud max-w-3xl"
           >
-            Build with Encrypt
+            {developersPage.headline}
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-5 text-lg sm:text-xl text-mist max-w-2xl leading-relaxed"
+            {...animateUp(0.2)}
+            className="text-lg text-mist mt-4 max-w-xl"
           >
-            Confidential execution primitives for Solana developers
+            {developersPage.subheadline}
           </motion.p>
         </div>
       </section>
 
-      {/* Primitives */}
-      <section className="py-20 sm:py-28">
+      {/* Primitives grid */}
+      <section className="py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <motion.h2
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="font-display text-3xl sm:text-4xl font-bold text-cloud mb-4"
-          >
-            Primitives
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-mist max-w-xl mb-14"
-          >
-            A minimal set of building blocks for confidential applications on Solana.
-          </motion.p>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {primitives.map((p, i) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {developersPage.primitives.map((p, i) => (
               <motion.div
                 key={p.title}
-                custom={i}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true }}
-                variants={fade}
-                className="group relative rounded-2xl border border-white/[0.06] bg-abyss/60 p-7 transition-all hover:border-ultraviolet/30 hover:bg-abyss/80"
+                {...fadeUp(i * 0.08)}
+                className="rounded-3xl bg-abyss/40 border border-white/[0.06] p-7 transition-colors hover:border-ultraviolet/15"
               >
-                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-ultraviolet/10">
-                  <p.icon size={20} className="text-ultraviolet" />
-                </div>
-                <h3 className="font-display text-lg font-semibold text-cloud mb-2">
+                <h3 className="font-display font-semibold text-base text-cloud mb-2">
                   {p.title}
                 </h3>
-                <p className="text-sm text-mist leading-relaxed">{p.description}</p>
+                <p className="text-sm text-mist">{p.body}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Code Block */}
-      <section className="py-20 sm:py-28">
+      {/* Code panel */}
+      <section className="py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.h2
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="font-display text-3xl sm:text-4xl font-bold text-cloud mb-4"
+            {...fadeUp(0)}
+            className="font-display font-semibold text-xl text-cloud mb-2"
           >
-            Quick start
+            {developersPage.codePanel.title}
           </motion.h2>
+
           <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-mist max-w-xl mb-10"
+            {...fadeUp(0.05)}
+            className="text-xs text-signal-coral/80 mb-6"
           >
-            The Encrypt SDK gives you a clean interface to confidential execution. Here is what it will look like.
+            {developersPage.codePanel.note}
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="relative rounded-2xl border border-white/[0.06] bg-[#0a0e1a] overflow-hidden"
+            {...fadeUp(0.1)}
+            className="rounded-2xl bg-[#0a0e1a] border border-white/[0.06] p-6 overflow-x-auto"
           >
-            {/* Window chrome */}
-            <div className="flex items-center gap-2 px-5 py-3 border-b border-white/[0.06]">
-              <div className="w-3 h-3 rounded-full bg-white/10" />
-              <div className="w-3 h-3 rounded-full bg-white/10" />
-              <div className="w-3 h-3 rounded-full bg-white/10" />
-              <span className="ml-3 text-xs text-mist/50 font-mono">encrypt-demo.ts</span>
-            </div>
-            <pre className="p-6 overflow-x-auto text-sm font-mono leading-relaxed">
-              {codeLines.map((line, i) => (
-                <div key={i} className="flex">
-                  <span className="w-8 shrink-0 text-right text-mist/25 select-none pr-4">
-                    {i + 1}
-                  </span>
-                  <span
-                    className={
-                      line.startsWith("//")
-                        ? "text-mist/50"
-                        : line.startsWith("import")
-                        ? "text-prism-cyan"
-                        : "text-cloud/80"
-                    }
-                  >
-                    {line || "\u00A0"}
-                  </span>
-                </div>
-              ))}
+            <pre className="text-sm font-mono leading-relaxed">
+              <code>
+                {developersPage.codePanel.lines.map((line, i) => (
+                  <div key={i} className="flex">
+                    <span className="w-8 shrink-0 text-right text-mist/30 select-none pr-4">
+                      {i + 1}
+                    </span>
+                    {renderCodeLine(line)}
+                  </div>
+                ))}
+              </code>
             </pre>
           </motion.div>
         </div>
       </section>
 
-      {/* Architecture */}
-      <section className="py-20 sm:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <motion.h2
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="font-display text-3xl sm:text-4xl font-bold text-cloud mb-4"
+      {/* Architecture lanes */}
+      <section className="py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-4">
+          <motion.div
+            {...fadeUp(0)}
+            className="rounded-2xl bg-ultraviolet/10 border border-ultraviolet/20 px-6 py-5"
           >
-            Architecture
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-mist max-w-xl mb-14"
-          >
-            Encrypt sits between your application and Solana, adding a confidential execution layer without changing the settlement model.
-          </motion.p>
+            <span className="font-display font-semibold text-sm text-cloud">
+              {developersPage.architectureLanes.confidential}
+            </span>
+          </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="flex flex-col md:flex-row items-stretch gap-4"
+            {...fadeUp(0.08)}
+            className="rounded-2xl bg-cipher-mint/10 border border-cipher-mint/20 px-6 py-5"
           >
-            {archBoxes.map((box, i) => (
-              <div key={box.label} className="flex items-center gap-4 flex-1">
-                <div className="flex-1 rounded-2xl border border-white/[0.06] bg-abyss/60 p-8 text-center">
-                  <h3 className="font-display text-lg font-semibold text-cloud mb-1">
-                    {box.label}
-                  </h3>
-                  <p className="text-sm text-mist">{box.sublabel}</p>
-                </div>
-                {i < archBoxes.length - 1 && (
-                  <ChevronRight
-                    size={24}
-                    className="text-ultraviolet shrink-0 hidden md:block"
-                  />
-                )}
-                {i < archBoxes.length - 1 && (
-                  <div className="md:hidden flex justify-center w-full">
-                    <ArrowRight size={20} className="text-ultraviolet rotate-90" />
-                  </div>
-                )}
-              </div>
-            ))}
+            <span className="font-display font-semibold text-sm text-cloud">
+              {developersPage.architectureLanes.public}
+            </span>
           </motion.div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-20 sm:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <motion.h2
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="font-display text-3xl sm:text-4xl font-bold text-cloud mb-5"
-          >
-            Start building
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-mist max-w-lg mx-auto mb-10"
-          >
-            Encrypt is in developer preview. Get early access and start building confidential applications on Solana.
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4"
-          >
+      {/* Integration steps */}
+      <section className="py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <ol className="space-y-5">
+            {developersPage.integrationSteps.map((step, i) => (
+              <motion.li
+                key={i}
+                {...fadeUp(i * 0.06)}
+                className="flex items-start gap-4"
+              >
+                <span className="text-xs font-display text-ultraviolet/60 pt-0.5">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span className="text-sm text-mist">{step}</span>
+              </motion.li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {/* CTA row */}
+      <section className="py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center gap-4">
+          {primaryCTA.href && (
             <Link
-              href="#"
-              className="inline-flex items-center gap-2 rounded-lg bg-ultraviolet px-6 py-3 text-sm font-medium text-white transition-all hover:bg-ultraviolet/85 hover:shadow-[0_0_24px_rgba(122,92,255,0.3)]"
+              href={primaryCTA.href}
+              className="inline-flex items-center rounded-lg bg-ultraviolet px-6 py-3 text-sm font-medium text-white transition-all hover:bg-ultraviolet/85 hover:shadow-[0_0_24px_rgba(122,92,255,0.3)]"
             >
-              Join the developer preview
-              <ArrowRight size={16} />
+              {primaryCTA.label}
             </Link>
+          )}
+          {secondaryCTA.href && (
             <Link
-              href="/docs"
-              className="inline-flex items-center gap-2 rounded-lg border border-white/10 px-6 py-3 text-sm font-medium text-cloud transition-all hover:border-white/25 hover:bg-white/[0.04]"
+              href={secondaryCTA.href}
+              className="inline-flex items-center rounded-lg border border-white/10 px-6 py-3 text-sm font-medium text-cloud transition-all hover:border-white/25 hover:bg-white/[0.04]"
             >
-              Read the docs
-              <ArrowRight size={16} />
+              {secondaryCTA.label}
             </Link>
-          </motion.div>
+          )}
         </div>
       </section>
 

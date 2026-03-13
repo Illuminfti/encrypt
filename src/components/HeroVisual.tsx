@@ -2,186 +2,370 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 
-const CELL_COUNT = 8;
-const CELL_SIZE = 28;
-const CELL_GAP = 4;
-const BAR_WIDTH = CELL_COUNT * (CELL_SIZE + CELL_GAP) - CELL_GAP;
+/* ── Deterministic scatter coordinates for 64 cells ──────────── */
+const SCATTER = Array.from({ length: 64 }, (_, i) => ({
+  x: ((i * 7 + 13) % 64) * 3.5 + 10,
+  y: ((i * 11 + 5) % 40) + 30,
+}));
+
+/* ── Manta-ray silhouette (simplified veilray) ───────────────── */
+const MANTA_PATH =
+  "M240,120 Q220,100 200,95 Q170,88 150,95 Q130,80 110,88 Q90,95 80,110 Q70,95 50,88 Q30,80 10,95 Q-10,100 -30,110 Q-10,130 10,125 Q30,135 50,128 Q70,138 80,125 Q90,140 110,128 Q130,135 150,125 Q170,130 200,125 Q220,130 240,120 Z M110,108 Q115,102 120,108 Q115,112 110,108 Z";
+
+/* ── Cell helpers ────────────────────────────────────────────── */
+const INPUT_X = 20;
+const OUTPUT_X = 340;
+const CELL_W = 4;
+const CELL_GAP = 1;
+const VEIL_X = 200;
+const VEIL_W = 80;
+
+function inputCellX(i: number) {
+  return INPUT_X + i * (CELL_W + CELL_GAP);
+}
+function outputCellX(i: number) {
+  return OUTPUT_X + i * (CELL_W + CELL_GAP);
+}
+function cipherMintOpacity(i: number) {
+  return 0.6 + (i % 3) * 0.15;
+}
+function prismCyanOpacity(i: number) {
+  return 0.55 + (i % 4) * 0.12;
+}
+function scatterOpacity(i: number) {
+  return 0.3 + (i % 5) * 0.12;
+}
+
+/* ── Dashed trail lines ──────────────────────────────────────── */
+const TRAIL_YS = [92, 97, 102, 107];
 
 export default function HeroVisual() {
   const prefersReducedMotion = useReducedMotion();
-  const cycleDuration = prefersReducedMotion ? 0 : 18;
 
-  // Manta ray silhouette path
-  const mantaPath =
-    "M200,180 Q240,120 320,100 Q360,90 400,100 Q440,80 480,90 Q520,100 540,130 Q560,100 600,90 Q640,80 680,100 Q760,120 800,180 Q820,200 800,220 Q760,260 680,240 Q640,250 600,240 Q560,250 540,230 Q520,250 480,240 Q440,250 400,240 Q360,250 320,240 Q240,260 200,220 Q180,200 200,180 Z M480,160 Q500,140 520,160 Q500,170 480,160 Z";
+  /* ── Static / reduced-motion version ───────────────────────── */
+  if (prefersReducedMotion) {
+    return (
+      <div className="relative w-full flex items-center justify-center py-8">
+        <svg
+          viewBox="0 0 480 200"
+          className="w-full h-auto"
+          aria-label="Encrypted word computation visualization"
+        >
+          <defs>
+            <linearGradient id="veil-grad-static" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#7A5CFF" stopOpacity="0.05" />
+              <stop offset="50%" stopColor="#7A5CFF" stopOpacity="0.2" />
+              <stop offset="100%" stopColor="#7A5CFF" stopOpacity="0.05" />
+            </linearGradient>
+          </defs>
 
+          {/* Manta silhouette */}
+          <g transform="translate(120,0) scale(1.5)" opacity="0.05">
+            <path d={MANTA_PATH} fill="#7A5CFF" />
+          </g>
+
+          {/* Trail lines */}
+          {TRAIL_YS.map((ty) => (
+            <line
+              key={ty}
+              x1={INPUT_X}
+              y1={ty}
+              x2={OUTPUT_X + 64 * (CELL_W + CELL_GAP)}
+              y2={ty}
+              stroke="#91A2C7"
+              strokeWidth="0.5"
+              strokeDasharray="4 6"
+              opacity="0.08"
+            />
+          ))}
+
+          {/* Veil glow */}
+          <rect
+            x={VEIL_X - 20}
+            y="20"
+            width={VEIL_W + 40}
+            height="160"
+            rx="12"
+            fill="#7A5CFF"
+            opacity="0.08"
+          />
+          {/* Veil zone */}
+          <rect
+            x={VEIL_X}
+            y="20"
+            width={VEIL_W}
+            height="160"
+            rx="8"
+            fill="url(#veil-grad-static)"
+          />
+          {/* Veil brackets */}
+          <text x={VEIL_X - 8} y="105" fill="#7A5CFF" fontSize="14" opacity="0.3" fontFamily="monospace">[</text>
+          <text x={VEIL_X + VEIL_W + 2} y="105" fill="#7A5CFF" fontSize="14" opacity="0.3" fontFamily="monospace">]</text>
+
+          {/* Input bar */}
+          {Array.from({ length: 64 }, (_, i) => (
+            <rect
+              key={`in-${i}`}
+              x={inputCellX(i)}
+              y="96"
+              width={CELL_W}
+              height={CELL_W}
+              rx="0.5"
+              fill="#1CF2C7"
+              opacity={cipherMintOpacity(i)}
+            />
+          ))}
+          <text x={INPUT_X} y="118" fill="#91A2C7" fontSize="8" opacity="0.5">
+            64-bit word
+          </text>
+
+          {/* Scattered bits */}
+          {SCATTER.map((pos, i) => (
+            <rect
+              key={`sc-${i}`}
+              x={VEIL_X + pos.x * 0.3}
+              y={pos.y + 50}
+              width="2"
+              height="2"
+              rx="0.5"
+              fill="#7A5CFF"
+              opacity={scatterOpacity(i)}
+            />
+          ))}
+
+          {/* Output bar */}
+          {Array.from({ length: 64 }, (_, i) => (
+            <rect
+              key={`out-${i}`}
+              x={outputCellX(i)}
+              y="96"
+              width={CELL_W}
+              height={CELL_W}
+              rx="0.5"
+              fill="#46CFFF"
+              opacity={prismCyanOpacity(i)}
+            />
+          ))}
+          <text x={OUTPUT_X} y="118" fill="#91A2C7" fontSize="8" opacity="0.5">
+            64-bit word
+          </text>
+        </svg>
+      </div>
+    );
+  }
+
+  /* ── Animated version ──────────────────────────────────────── */
   return (
-    <div className="relative w-full h-[400px] md:h-[500px] flex items-center justify-center overflow-hidden">
-      {/* Manta ray silhouette */}
+    <div className="relative w-full flex items-center justify-center py-8">
       <svg
-        className="absolute inset-0 w-full h-full opacity-[0.07]"
-        viewBox="0 0 1000 400"
-        preserveAspectRatio="xMidYMid meet"
-      >
-        <path d={mantaPath} fill="#7A5CFF" />
-      </svg>
-
-      {/* Main animation SVG */}
-      <svg
-        viewBox="0 0 520 200"
-        className="relative w-full max-w-[520px] h-auto"
-        aria-label="Animation showing data cells passing through an encryption veil and reforming as encrypted output"
+        viewBox="0 0 480 200"
+        className="w-full h-auto"
+        aria-label="Encrypted word computation visualization"
       >
         <defs>
-          {/* Veil gradient */}
-          <linearGradient id="veilGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#7A5CFF" stopOpacity="0" />
-            <stop offset="30%" stopColor="#7A5CFF" stopOpacity="0.6" />
-            <stop offset="50%" stopColor="#7A5CFF" stopOpacity="0.8" />
-            <stop offset="70%" stopColor="#7A5CFF" stopOpacity="0.6" />
-            <stop offset="100%" stopColor="#7A5CFF" stopOpacity="0" />
+          <linearGradient id="veil-grad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#7A5CFF" stopOpacity="0.05" />
+            <stop offset="50%" stopColor="#7A5CFF" stopOpacity="0.2" />
+            <stop offset="100%" stopColor="#7A5CFF" stopOpacity="0.05" />
           </linearGradient>
-
-          {/* Glow filter */}
-          <filter id="veilGlow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="8" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-
-          <filter id="cellGlow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="3" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
         </defs>
 
-        {/* Veil barrier */}
+        {/* Manta silhouette */}
+        <g transform="translate(120,0) scale(1.5)" opacity="0.05">
+          <path d={MANTA_PATH} fill="#7A5CFF" />
+        </g>
+
+        {/* Trail lines */}
+        {TRAIL_YS.map((ty) => (
+          <line
+            key={ty}
+            x1={INPUT_X}
+            y1={ty}
+            x2={OUTPUT_X + 64 * (CELL_W + CELL_GAP)}
+            y2={ty}
+            stroke="#91A2C7"
+            strokeWidth="0.5"
+            strokeDasharray="4 6"
+            opacity="0.08"
+          />
+        ))}
+
+        {/* Veil glow (pulsing) */}
         <motion.rect
-          x="245"
+          x={VEIL_X - 20}
           y="20"
-          width="30"
+          width={VEIL_W + 40}
           height="160"
-          rx="15"
-          fill="url(#veilGrad)"
-          filter="url(#veilGlow)"
-          animate={
-            prefersReducedMotion
-              ? {}
-              : { opacity: [0.5, 0.9, 0.5] }
-          }
+          rx="12"
+          fill="#7A5CFF"
+          animate={{ opacity: [0.06, 0.12, 0.06] }}
           transition={{
-            duration: 3,
+            duration: 20,
             repeat: Infinity,
             ease: "easeInOut" as const,
           }}
         />
 
-        {/* Input cells (plaintext word bar) - entering from left */}
-        {Array.from({ length: CELL_COUNT }).map((_, i) => {
-          const startX = -BAR_WIDTH + i * (CELL_SIZE + CELL_GAP);
-          const barX = 10 + i * (CELL_SIZE + CELL_GAP);
-          const y = 86;
+        {/* Veil zone */}
+        <rect
+          x={VEIL_X}
+          y="20"
+          width={VEIL_W}
+          height="160"
+          rx="8"
+          fill="url(#veil-grad)"
+        />
 
-          // Scatter positions (behind the veil)
-          const scatterX = 260 + Math.random() * 60 - 30 + i * 5;
-          const scatterY = 40 + Math.random() * 120;
+        {/* Veil brackets */}
+        <text x={VEIL_X - 8} y="105" fill="#7A5CFF" fontSize="14" opacity="0.3" fontFamily="monospace">[</text>
+        <text x={VEIL_X + VEIL_W + 2} y="105" fill="#7A5CFF" fontSize="14" opacity="0.3" fontFamily="monospace">]</text>
 
-          // Reformed positions (output bar)
-          const reformX = 280 + i * (CELL_SIZE + CELL_GAP);
-
-          const keyframes = [
-            startX,   // 0% - offscreen
-            barX,     // 15% - formed as bar
-            barX,     // 30% - hold
-            scatterX, // 50% - scatter through veil
-            scatterX, // 60% - hold scatter
-            reformX,  // 75% - reform
-            reformX,  // 90% - hold
-            reformX + BAR_WIDTH + 100, // 100% - exit right
-          ];
-          const yKeyframes = [
-            y, y, y, scatterY, scatterY, y, y, y,
-          ];
-          const times = [0, 0.12, 0.28, 0.45, 0.55, 0.7, 0.88, 1];
+        {/* ── Input bar cells ────────────────────────────── */}
+        {Array.from({ length: 64 }, (_, i) => {
+          const ix = inputCellX(i);
+          const sc = SCATTER[i];
+          const scX = VEIL_X + sc.x * 0.3;
+          const scY = sc.y + 50;
+          const ox = outputCellX(i);
+          const baseY = 96;
+          const cellDelay = i * 0.02;
 
           return (
             <motion.rect
-              key={i}
-              width={CELL_SIZE}
-              height={CELL_SIZE}
-              rx="4"
-              filter="url(#cellGlow)"
-              animate={
-                prefersReducedMotion
-                  ? { x: barX, y, fill: "#1CF2C7", opacity: 0.9 }
-                  : {
-                      x: keyframes,
-                      y: yKeyframes,
-                      fill: [
-                        "#1CF2C7",
-                        "#1CF2C7",
-                        "#1CF2C7",
-                        "#7A5CFF",
-                        "#7A5CFF",
-                        "#46CFFF",
-                        "#46CFFF",
-                        "#46CFFF",
-                      ],
-                      opacity: [0, 1, 1, 0.7, 0.7, 1, 1, 0],
-                    }
-              }
-              transition={
-                prefersReducedMotion
-                  ? { duration: 0 }
-                  : {
-                      duration: cycleDuration,
-                      repeat: Infinity,
-                      ease: "easeInOut" as const,
-                      times,
-                      delay: i * 0.08,
-                    }
-              }
+              key={`cell-${i}`}
+              width={CELL_W}
+              height={CELL_W}
+              rx="0.5"
+              initial={{ x: ix - 10, y: baseY, opacity: 0 }}
+              animate={{
+                x: [ix - 10, ix, ix, scX, scX, ox, ox, ox],
+                y: [baseY, baseY, baseY, scY, scY, baseY, baseY, baseY],
+                opacity: [
+                  0,
+                  cipherMintOpacity(i),
+                  cipherMintOpacity(i),
+                  scatterOpacity(i),
+                  scatterOpacity(i),
+                  prismCyanOpacity(i),
+                  prismCyanOpacity(i),
+                  prismCyanOpacity(i),
+                ],
+                fill: [
+                  "#1CF2C7",
+                  "#1CF2C7",
+                  "#1CF2C7",
+                  "#7A5CFF",
+                  "#7A5CFF",
+                  "#46CFFF",
+                  "#46CFFF",
+                  "#46CFFF",
+                ],
+              }}
+              transition={{
+                duration: 6,
+                delay: cellDelay,
+                ease: "easeInOut" as const,
+                times: [0, 0.08, 0.25, 0.42, 0.55, 0.72, 0.88, 1],
+                repeat: 0,
+              }}
             />
           );
         })}
 
+        {/* ── Idle loop: scattered bits pulsing inside veil ── */}
+        {SCATTER.map((pos, i) => (
+          <motion.rect
+            key={`idle-sc-${i}`}
+            x={VEIL_X + pos.x * 0.3}
+            y={pos.y + 50}
+            width="2"
+            height="2"
+            rx="0.5"
+            fill="#7A5CFF"
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: [
+                scatterOpacity(i) * 0.5,
+                scatterOpacity(i),
+                scatterOpacity(i) * 0.5,
+              ],
+            }}
+            transition={{
+              duration: 20,
+              delay: 6 + i * 0.1,
+              repeat: Infinity,
+              ease: "easeInOut" as const,
+            }}
+          />
+        ))}
+
+        {/* ── Persistent input bar (fades in after anim) ──── */}
+        {Array.from({ length: 64 }, (_, i) => (
+          <motion.rect
+            key={`in-persist-${i}`}
+            x={inputCellX(i)}
+            y="96"
+            width={CELL_W}
+            height={CELL_W}
+            rx="0.5"
+            fill="#1CF2C7"
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: [0, 0, cipherMintOpacity(i)],
+            }}
+            transition={{
+              duration: 8,
+              times: [0, 0.75, 1],
+              ease: "easeInOut" as const,
+            }}
+          />
+        ))}
+
+        {/* ── Persistent output bar (fades in after anim) ─── */}
+        {Array.from({ length: 64 }, (_, i) => (
+          <motion.rect
+            key={`out-persist-${i}`}
+            x={outputCellX(i)}
+            y="96"
+            width={CELL_W}
+            height={CELL_W}
+            rx="0.5"
+            fill="#46CFFF"
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: [0, 0, prismCyanOpacity(i)],
+            }}
+            transition={{
+              duration: 8,
+              times: [0, 0.75, 1],
+              ease: "easeInOut" as const,
+            }}
+          />
+        ))}
+
         {/* Labels */}
-        <text
-          x="10"
-          y="140"
+        <motion.text
+          x={INPUT_X}
+          y="118"
           fill="#91A2C7"
-          fontSize="10"
-          fontFamily="var(--font-inter), sans-serif"
-          opacity="0.6"
+          fontSize="8"
+          opacity="0"
+          animate={{ opacity: 0.5 }}
+          transition={{ duration: 0.6, delay: 6.5 }}
         >
-          Plaintext
-        </text>
-        <text
-          x="248"
-          y="195"
-          fill="#7A5CFF"
-          fontSize="10"
-          fontFamily="var(--font-inter), sans-serif"
-          textAnchor="middle"
-          opacity="0.7"
-        >
-          Veil
-        </text>
-        <text
-          x="410"
-          y="140"
+          64-bit word
+        </motion.text>
+        <motion.text
+          x={OUTPUT_X}
+          y="118"
           fill="#91A2C7"
-          fontSize="10"
-          fontFamily="var(--font-inter), sans-serif"
-          opacity="0.6"
+          fontSize="8"
+          opacity="0"
+          animate={{ opacity: 0.5 }}
+          transition={{ duration: 0.6, delay: 6.5 }}
         >
-          Encrypted
-        </text>
+          64-bit word
+        </motion.text>
       </svg>
     </div>
   );

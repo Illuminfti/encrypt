@@ -3,41 +3,73 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
-import { ArrowRight, Calendar } from "lucide-react";
-import Link from "next/link";
+import { blogPage } from "@/content/pages";
 
-const fade = {
-  hidden: { opacity: 0, y: 24 },
-  show: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.1, duration: 0.5, ease: "easeOut" as const },
-  }),
-};
+const ease = [0.22, 1, 0.36, 1] as const;
 
-const posts = [
-  {
-    title: "Why confidential execution matters on Solana",
-    date: "Jan 2025",
-    excerpt:
-      "Solana is the fastest settlement layer in crypto -- but speed without confidentiality leaves an entire category of applications unbuilt. Here is why encrypted execution changes that.",
-    gradient: "from-ultraviolet to-prism-cyan",
-  },
-  {
-    title: "Built for real application logic",
-    date: "Feb 2025",
-    excerpt:
-      "Most FHE implementations can barely add two encrypted numbers. Encrypt's RE-FHE scheme is designed for the kind of logic real programs actually need: comparisons, branching, and large integers.",
-    gradient: "from-cipher-mint to-ultraviolet",
-  },
-  {
-    title: "Public settlement, encrypted logic",
-    date: "Mar 2025",
-    excerpt:
-      "How Encrypt separates the settlement layer from the execution layer, giving you the transparency guarantees of Solana with the privacy guarantees of FHE.",
-    gradient: "from-signal-coral to-ultraviolet",
-  },
+function fadeUp(delay: number) {
+  return {
+    initial: { opacity: 0, y: 20 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true },
+    transition: { duration: 0.6, ease, delay },
+  };
+}
+
+function animateUp(delay: number) {
+  return {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.6, ease, delay },
+  };
+}
+
+const barColors = [
+  "bg-cipher-mint/60",
+  "bg-ultraviolet/50",
+  "bg-prism-cyan/40",
+  "bg-cipher-mint/30",
+  "bg-ultraviolet/70",
+  "bg-prism-cyan/60",
+  "bg-cipher-mint/40",
+  "bg-ultraviolet/30",
+  "bg-prism-cyan/50",
+  "bg-cipher-mint/50",
+  "bg-ultraviolet/40",
+  "bg-prism-cyan/70",
+  "bg-cipher-mint/70",
+  "bg-ultraviolet/60",
+  "bg-prism-cyan/30",
+  "bg-cipher-mint/20",
+  "bg-ultraviolet/20",
+  "bg-prism-cyan/20",
 ];
+
+function WordBarThumbnail({
+  gradient,
+  seed,
+}: {
+  gradient: string;
+  seed: number;
+}) {
+  return (
+    <div
+      className={`h-40 bg-gradient-to-br ${gradient} flex items-end justify-center gap-1 px-6 pb-4`}
+    >
+      {barColors.map((color, i) => {
+        // Deterministic height based on seed and index
+        const h = 8 + (((seed + 1) * (i + 3) * 7) % 20);
+        return (
+          <div
+            key={i}
+            className={`w-[3px] rounded-sm ${color}`}
+            style={{ height: `${h}px` }}
+          />
+        );
+      })}
+    </div>
+  );
+}
 
 export default function BlogPage() {
   return (
@@ -45,73 +77,44 @@ export default function BlogPage() {
       <Navbar />
 
       {/* Hero */}
-      <section className="relative pt-32 pb-16 sm:pt-40 sm:pb-20 overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[350px] rounded-full bg-ultraviolet/10 blur-[120px] pointer-events-none" />
-
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="py-32 lg:py-40">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-cloud"
+            {...animateUp(0)}
+            className="font-display font-bold text-4xl md:text-5xl text-cloud"
           >
-            Blog
+            {blogPage.headline}
           </motion.h1>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="mt-4 text-lg text-mist max-w-xl"
-          >
-            Thoughts on confidential execution, FHE research, and building on Solana.
+          <motion.p {...animateUp(0.1)} className="text-lg text-mist mt-4">
+            {blogPage.subheadline}
           </motion.p>
         </div>
       </section>
 
-      {/* Posts Grid */}
-      <section className="pb-28 sm:pb-36">
+      {/* Post cards */}
+      <section className="py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {posts.map((post, i) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {blogPage.posts.map((post, i) => (
               <motion.div
                 key={post.title}
-                custom={i}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true }}
-                variants={fade}
+                {...fadeUp(i * 0.08)}
+                className="rounded-3xl bg-abyss/40 border border-white/[0.06] overflow-hidden transition-colors hover:border-white/[0.1]"
               >
-                <Link
-                  href="#"
-                  className="group block rounded-2xl border border-white/[0.06] bg-abyss/60 overflow-hidden transition-all hover:border-ultraviolet/30 hover:bg-abyss/80"
-                >
-                  {/* Thumbnail placeholder */}
-                  <div
-                    className={`h-44 bg-gradient-to-br ${post.gradient} opacity-30 group-hover:opacity-50 transition-opacity`}
-                  />
+                <WordBarThumbnail gradient={post.gradient} seed={i} />
 
-                  {/* Content */}
-                  <div className="p-6">
-                    <div className="flex items-center gap-2 text-xs text-mist/60 mb-3">
-                      <Calendar size={13} />
-                      <time>{post.date}</time>
-                    </div>
-
-                    <h2 className="font-display text-lg font-semibold text-cloud mb-3 group-hover:text-ultraviolet transition-colors leading-snug">
-                      {post.title}
-                    </h2>
-
-                    <p className="text-sm text-mist leading-relaxed mb-4 line-clamp-3">
-                      {post.excerpt}
-                    </p>
-
-                    <span className="inline-flex items-center gap-1.5 text-sm font-medium text-ultraviolet group-hover:gap-2.5 transition-all">
-                      Read more
-                      <ArrowRight size={14} />
-                    </span>
-                  </div>
-                </Link>
+                <div className="p-6">
+                  <span className="text-[10px] uppercase tracking-wider text-ultraviolet/60 mb-2 block">
+                    {post.label}
+                  </span>
+                  <h2 className="font-display font-semibold text-base text-cloud mb-2">
+                    {post.title}
+                  </h2>
+                  <p className="text-sm text-mist leading-relaxed">
+                    {post.excerpt}
+                  </p>
+                </div>
               </motion.div>
             ))}
           </div>

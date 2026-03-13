@@ -1,100 +1,87 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { researchCards } from "@/content/home";
+import type { ResearchCard, ResearchCardStatus } from "@/content/home";
 
-const papers = [
-  {
-    title: "RE-FHE",
-    description:
-      "Real-number fully homomorphic encryption operating on machine-word values for practical confidential computation.",
-    href: "/research",
-  },
-  {
-    title: "Threshold FHE",
-    description:
-      "Distributed key generation and decryption across a network of nodes, eliminating single points of trust.",
-    href: "/research",
-  },
-  {
-    title: "Benchmarks",
-    description:
-      "Performance data for arithmetic, logical, and comparison operations on encrypted 64-bit words.",
-    href: "/research",
-  },
-  {
-    title: "Security model",
-    description:
-      "Formal threat model and security guarantees for confidential execution on a public ledger.",
-    href: "/research",
-  },
-  {
-    title: "Developer docs",
-    description:
-      "Guides, API references, and tutorials for building confidential Solana programs with Encrypt.",
-    href: "/research",
-  },
-];
+const ease = [0.22, 1, 0.36, 1] as const;
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.08 },
-  },
+const statusStyles: Record<ResearchCardStatus, string> = {
+  Paper: "text-cipher-mint bg-cipher-mint/10",
+  Research: "text-ultraviolet bg-ultraviolet/10",
+  "Coming soon": "text-signal-coral bg-signal-coral/10",
+  "Technical note": "text-prism-cyan bg-prism-cyan/10",
+  Docs: "text-mist bg-white/5",
 };
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const },
-  },
-};
+function CardInner({ card }: { card: ResearchCard }) {
+  return (
+    <>
+      <span
+        className={`inline-block text-[10px] uppercase tracking-wider mb-4 px-2 py-1 rounded ${statusStyles[card.status]}`}
+      >
+        {card.status}
+      </span>
+      <h3 className="font-display font-semibold text-lg text-cloud mb-2">
+        {card.title}
+      </h3>
+      <p className="text-sm text-mist leading-relaxed">{card.description}</p>
+      {card.note && (
+        <p className="text-xs text-mist/50 mt-3 italic">{card.note}</p>
+      )}
+      {card.href && (
+        <span className="text-xs text-ultraviolet/70 hover:text-ultraviolet mt-4 block">
+          Learn more &rarr;
+        </span>
+      )}
+    </>
+  );
+}
 
 export default function ResearchGrid() {
   return (
-    <section className="relative py-24 md:py-32">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+    <section id="research" className="py-24 lg:py-36">
+      <div className="max-w-content mx-auto px-6 lg:px-8">
         <motion.h2
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] as const }}
-          className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-16"
+          transition={{ duration: 0.6, ease }}
+          className="font-display font-bold text-3xl md:text-4xl text-cloud text-left"
         >
-          Research & proof
+          Research &amp; proof
         </motion.h2>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-40px" }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-        >
-          {papers.map((paper) => (
-            <motion.a
-              key={paper.title}
-              variants={cardVariants}
-              href={paper.href}
-              className="group bg-abyss border border-white/5 rounded-2xl p-7 flex flex-col justify-between hover:border-white/10 transition-all duration-300"
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {researchCards.map((card, i) => (
+            <motion.div
+              key={card.title}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.6, ease, delay: i * 0.08 }}
+              className={
+                i >= 3
+                  ? "md:col-span-1 lg:col-span-1"
+                  : undefined
+              }
             >
-              <div>
-                <h3 className="font-display text-lg font-semibold text-cloud mb-3 group-hover:text-prism-cyan transition-colors">
-                  {paper.title}
-                </h3>
-                <p className="text-mist text-sm leading-relaxed mb-6">
-                  {paper.description}
-                </p>
-              </div>
-              <div className="flex items-center gap-1.5 text-sm text-ultraviolet group-hover:text-prism-cyan transition-colors">
-                <span>Learn more</span>
-                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-              </div>
-            </motion.a>
+              {card.href ? (
+                <Link
+                  href={card.href}
+                  className="block rounded-3xl bg-abyss/40 border border-white/[0.06] p-7 hover:border-white/[0.1] transition-colors h-full"
+                >
+                  <CardInner card={card} />
+                </Link>
+              ) : (
+                <div className="rounded-3xl bg-abyss/40 border border-white/[0.06] p-7 h-full">
+                  <CardInner card={card} />
+                </div>
+              )}
+            </motion.div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

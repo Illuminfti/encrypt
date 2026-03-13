@@ -1,142 +1,259 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { ShieldCheck, ArrowRight, Globe, FileCheck } from "lucide-react";
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import Link from "next/link";
+import { fheTls } from "@/content/home";
 
-const steps = [
-  {
-    icon: ShieldCheck,
-    label: "Encrypted policy",
-    description: "Rules and parameters stay hidden from all parties",
-  },
-  {
-    icon: Globe,
-    label: "API read/write",
-    description: "Interact with external services over encrypted TLS",
-  },
-  {
-    icon: FileCheck,
-    label: "Verifiable outcome",
-    description: "Results are provably correct without revealing inputs",
-  },
-];
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 28 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
-  },
-};
+const ease = [0.22, 1, 0.36, 1] as const;
 
 export default function FHETLSSection() {
+  const step0Ref = useRef<HTMLDivElement>(null);
+  const step1Ref = useRef<HTMLDivElement>(null);
+  const step2Ref = useRef<HTMLDivElement>(null);
+
+  const step0InView = useInView(step0Ref, { once: true, margin: "-80px" });
+  const step1InView = useInView(step1Ref, { once: true, margin: "-80px" });
+  const step2InView = useInView(step2Ref, { once: true, margin: "-80px" });
+
+  const stepInView = [step0InView, step1InView, step2InView];
+  const stepRefs = [step0Ref, step1Ref, step2Ref];
+
   return (
-    <section className="relative py-28 md:py-36 overflow-hidden">
-      {/* Gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-ultraviolet/[0.04] via-void to-void" />
+    <section
+      id="fhe-tls"
+      className="relative py-24 lg:py-36 bg-gradient-to-b from-void via-ultraviolet/[0.03] to-void"
+    >
+      <div className="max-w-content mx-auto px-6 lg:px-8">
+        {/* ── DESKTOP ── */}
+        <div className="hidden lg:flex gap-12">
+          {/* Left — sticky column */}
+          <div className="lg:w-[45%]">
+            <div className="sticky top-32">
+              <motion.p
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.6, ease }}
+                className="text-xs uppercase tracking-widest text-prism-cyan mb-4"
+              >
+                {fheTls.eyebrow}
+              </motion.p>
 
-      {/* Decorative orbs */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute top-[10%] left-[5%] w-[500px] h-[500px] rounded-full bg-ultraviolet/[0.06] blur-[140px]" />
-        <div className="absolute bottom-[10%] right-[10%] w-[400px] h-[400px] rounded-full bg-prism-cyan/[0.05] blur-[120px]" />
-        <div className="absolute top-[40%] left-[50%] -translate-x-1/2 w-[600px] h-[300px] rounded-full bg-cipher-mint/[0.03] blur-[100px]" />
-      </div>
+              <motion.h2
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.6, ease, delay: 0.05 }}
+                className="font-display font-bold text-3xl md:text-4xl text-cloud"
+              >
+                {fheTls.headline}
+              </motion.h2>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ staggerChildren: 0.12 }}
-          className="text-center mb-16 md:mb-20"
-        >
-          <motion.h2
-            variants={fadeUp}
-            className="font-display text-3xl md:text-4xl lg:text-5xl font-bold mb-6"
-          >
-            Read private.{" "}
-            <span className="bg-gradient-to-r from-prism-cyan to-cipher-mint bg-clip-text text-transparent">
-              Write verifiable.
-            </span>
-          </motion.h2>
-          <motion.p
-            variants={fadeUp}
-            className="text-mist text-lg md:text-xl max-w-2xl mx-auto leading-relaxed"
-          >
-            Solana programs can interact with APIs without exposing the data or
-            intent that drives the action.
-          </motion.p>
-        </motion.div>
+              <motion.p
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.6, ease, delay: 0.1 }}
+                className="text-base text-mist mt-4 max-w-md"
+              >
+                {fheTls.body}
+              </motion.p>
 
-        {/* Flow diagram */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ staggerChildren: 0.15, delayChildren: 0.2 }}
-          className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-0"
-        >
-          {steps.map((step, i) => (
-            <motion.div
-              key={step.label}
-              variants={fadeUp}
-              className="flex items-center gap-4 md:gap-0"
-            >
-              {/* Glass card */}
-              <div className="relative group w-full md:w-[260px]">
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-ultraviolet/10 to-prism-cyan/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl" />
-                <div className="relative bg-abyss/80 backdrop-blur-sm border border-white/[0.08] rounded-2xl p-6 text-center hover:border-white/15 transition-all duration-300">
-                  <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-ultraviolet/15 to-prism-cyan/10 mx-auto mb-4">
-                    <step.icon className="w-6 h-6 text-prism-cyan" />
-                  </div>
-                  <h3 className="font-display text-lg font-semibold text-cloud mb-2">
-                    {step.label}
-                  </h3>
-                  <p className="text-mist text-xs leading-relaxed">
-                    {step.description}
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.6, ease, delay: 0.15 }}
+                className="mt-6 flex flex-wrap gap-2"
+              >
+                {fheTls.chips.map((chip) => (
+                  <span
+                    key={chip}
+                    className="text-xs px-3 py-1.5 rounded-full border border-prism-cyan/20 text-prism-cyan/80 bg-prism-cyan/5"
+                  >
+                    {chip}
+                  </span>
+                ))}
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.6, ease, delay: 0.2 }}
+                className="mt-8"
+              >
+                <Link
+                  href="/research"
+                  className="text-sm text-ultraviolet hover:text-cloud transition-colors"
+                >
+                  Read Research &rarr;
+                </Link>
+              </motion.div>
+            </div>
+          </div>
+
+          {/* Right — scrolling step panels */}
+          <div className="lg:w-[55%] relative">
+            {/* Vertical beam rail */}
+            <div className="absolute left-8 top-0 bottom-0 w-0.5 pointer-events-none">
+              {fheTls.steps.map((_, i) => (
+                <div
+                  key={i}
+                  className="transition-colors duration-700"
+                  style={{
+                    height: `${100 / fheTls.steps.length}%`,
+                    background: stepInView[i]
+                      ? "linear-gradient(to bottom, rgba(0,224,255,0.5), rgba(124,58,237,0.5))"
+                      : "linear-gradient(to bottom, rgba(0,224,255,0.1), rgba(124,58,237,0.1))",
+                  }}
+                />
+              ))}
+            </div>
+
+            <div className="space-y-8 pl-16">
+              {fheTls.steps.map((step, i) => (
+                <motion.div
+                  key={step.step}
+                  ref={stepRefs[i]}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-80px" }}
+                  transition={{ duration: 0.6, ease, delay: i * 0.1 }}
+                  className="rounded-3xl bg-abyss/60 border border-white/[0.06] p-8"
+                >
+                  <p className="text-xs font-display text-prism-cyan/60 mb-2">
+                    Step {step.step}
                   </p>
-                </div>
-              </div>
+                  <h3 className="font-display font-semibold text-lg text-cloud mb-2">
+                    {step.title}
+                  </h3>
+                  <p className="text-sm text-mist leading-relaxed">
+                    {step.body}
+                  </p>
+                </motion.div>
+              ))}
 
-              {/* Arrow connector */}
-              {i < steps.length - 1 && (
-                <>
-                  {/* Desktop arrow */}
-                  <div className="hidden md:flex items-center px-4">
-                    <motion.div
-                      initial={{ scaleX: 0, opacity: 0 }}
-                      whileInView={{ scaleX: 1, opacity: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: 0.5 + i * 0.2, duration: 0.5 }}
-                      className="origin-left"
-                    >
-                      <div className="flex items-center gap-1">
-                        <div className="w-12 h-px bg-gradient-to-r from-ultraviolet/40 to-prism-cyan/40" />
-                        <ArrowRight className="w-4 h-4 text-prism-cyan/50" />
-                      </div>
-                    </motion.div>
-                  </div>
-                  {/* Mobile arrow */}
-                  <div className="md:hidden flex items-center py-1">
-                    <motion.div
-                      initial={{ scaleY: 0, opacity: 0 }}
-                      whileInView={{ scaleY: 1, opacity: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: 0.5 + i * 0.2, duration: 0.5 }}
-                      className="origin-top"
-                    >
-                      <div className="flex flex-col items-center gap-1">
-                        <div className="w-px h-8 bg-gradient-to-b from-ultraviolet/40 to-prism-cyan/40" />
-                        <ArrowRight className="w-4 h-4 text-prism-cyan/50 rotate-90" />
-                      </div>
-                    </motion.div>
-                  </div>
-                </>
-              )}
+              {/* Example panel */}
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.6, ease, delay: 0.3 }}
+                className="rounded-2xl bg-ultraviolet/5 border border-ultraviolet/10 p-6"
+              >
+                <p className="text-sm text-mist font-mono">
+                  {fheTls.example}
+                </p>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+
+        {/* ── MOBILE ── */}
+        <div className="lg:hidden space-y-8">
+          {/* Content */}
+          <div>
+            <motion.p
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.6, ease }}
+              className="text-xs uppercase tracking-widest text-prism-cyan mb-4"
+            >
+              {fheTls.eyebrow}
+            </motion.p>
+
+            <motion.h2
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.6, ease, delay: 0.05 }}
+              className="font-display font-bold text-3xl text-cloud"
+            >
+              {fheTls.headline}
+            </motion.h2>
+
+            <motion.p
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.6, ease, delay: 0.1 }}
+              className="text-base text-mist mt-4 max-w-md"
+            >
+              {fheTls.body}
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.6, ease, delay: 0.15 }}
+              className="mt-6 flex flex-wrap gap-2"
+            >
+              {fheTls.chips.map((chip) => (
+                <span
+                  key={chip}
+                  className="text-xs px-3 py-1.5 rounded-full border border-prism-cyan/20 text-prism-cyan/80 bg-prism-cyan/5"
+                >
+                  {chip}
+                </span>
+              ))}
             </motion.div>
-          ))}
-        </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.6, ease, delay: 0.2 }}
+              className="mt-8"
+            >
+              <Link
+                href="/research"
+                className="text-sm text-ultraviolet hover:text-cloud transition-colors"
+              >
+                Read Research &rarr;
+              </Link>
+            </motion.div>
+          </div>
+
+          {/* Step panels (no rail on mobile) */}
+          <div className="space-y-6">
+            {fheTls.steps.map((step, i) => (
+              <motion.div
+                key={step.step}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.6, ease, delay: i * 0.08 }}
+                className="rounded-3xl bg-abyss/60 border border-white/[0.06] p-8"
+              >
+                <p className="text-xs font-display text-prism-cyan/60 mb-2">
+                  Step {step.step}
+                </p>
+                <h3 className="font-display font-semibold text-lg text-cloud mb-2">
+                  {step.title}
+                </h3>
+                <p className="text-sm text-mist leading-relaxed">
+                  {step.body}
+                </p>
+              </motion.div>
+            ))}
+
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.6, ease, delay: 0.3 }}
+              className="rounded-2xl bg-ultraviolet/5 border border-ultraviolet/10 p-6"
+            >
+              <p className="text-sm text-mist font-mono">
+                {fheTls.example}
+              </p>
+            </motion.div>
+          </div>
+        </div>
       </div>
     </section>
   );

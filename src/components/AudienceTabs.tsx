@@ -2,114 +2,106 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { audience } from "@/content/home";
 
-const tabs = [
-  {
-    id: "builders",
-    label: "Builders",
-    headline: "Build Solana apps with encrypted state and confidential logic.",
-    bullets: [
-      "Encrypted program state with RE-FHE primitives",
-      "Composable confidential transactions on Solana",
-      "FHE-TLS for private API reads and writes",
-      "SDKs for TypeScript and Rust",
-    ],
-  },
-  {
-    id: "traders",
-    label: "Traders & Users",
-    headline: "Your alpha should not be public by default.",
-    bullets: [
-      "Execute strategies without broadcasting intent",
-      "Submit orders that resist front-running and MEV",
-      "Keep position sizes and timing confidential",
-      "Selective disclosure when and where you choose",
-    ],
-  },
-  {
-    id: "investors",
-    label: "Investors",
-    headline:
-      "Internet capital markets cannot stay fully public forever.",
-    bullets: [
-      "Confidential execution is a protocol-level primitive",
-      "Encrypt targets the largest crypto ecosystem on Solana",
-      "RE-FHE unlocks real application logic, not toy demos",
-      "Backed by dWallet Labs and world-class cryptography research",
-    ],
-  },
-];
+const ease = [0.22, 1, 0.36, 1] as const;
 
 export default function AudienceTabs() {
-  const [activeTab, setActiveTab] = useState("builders");
-  const activeContent = tabs.find((t) => t.id === activeTab)!;
+  const [activeIdx, setActiveIdx] = useState(0);
+  const activeTab = audience.tabs[activeIdx];
 
   return (
-    <section className="relative py-24 md:py-32">
-      <div className="max-w-4xl mx-auto px-6 lg:px-8">
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
+    <section id="audience" className="py-24 lg:py-36">
+      <div className="max-w-content mx-auto px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] as const }}
-          className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-12"
+          transition={{ duration: 0.6, ease }}
+          className="rounded-3xl bg-abyss/40 border border-white/[0.06] p-8 lg:p-12"
         >
-          Who is Encrypt for
-        </motion.h2>
+          <h2 className="font-display font-bold text-2xl md:text-3xl text-cloud mb-10">
+            {audience.headline}
+          </h2>
 
-        {/* Tab bar */}
-        <div className="relative flex justify-center mb-12">
-          <div className="inline-flex gap-1 p-1 rounded-xl bg-abyss border border-white/5">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`relative px-6 py-2.5 rounded-lg text-sm font-medium transition-colors duration-200 ${
-                  activeTab === tab.id ? "text-cloud" : "text-mist hover:text-cloud/80"
-                }`}
-              >
-                {activeTab === tab.id && (
-                  <motion.div
-                    layoutId="activeTab"
-                    className="absolute inset-0 rounded-lg bg-ultraviolet/15 border border-ultraviolet/20"
-                    transition={{
-                      type: "spring",
-                      stiffness: 400,
-                      damping: 30,
-                    }}
-                  />
-                )}
-                <span className="relative z-10">{tab.label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            {/* ── Left: tabs + content ── */}
+            <div className="lg:col-span-8">
+              {/* Tab bar */}
+              <div className="flex gap-1 bg-abyss/60 rounded-xl p-1 mb-8">
+                {audience.tabs.map((tab, i) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveIdx(i)}
+                    className={`relative px-4 py-2.5 text-sm font-display rounded-lg cursor-pointer transition-colors ${
+                      activeIdx === i
+                        ? "text-cloud"
+                        : "text-mist hover:text-cloud/80"
+                    }`}
+                  >
+                    {activeIdx === i && (
+                      <motion.div
+                        layoutId="audienceActiveTab"
+                        className="absolute inset-0 rounded-lg bg-ultraviolet/10"
+                        transition={{
+                          type: "spring",
+                          stiffness: 400,
+                          damping: 30,
+                        }}
+                      />
+                    )}
+                    <span className="relative z-10">{tab.label}</span>
+                  </button>
+                ))}
+              </div>
 
-        {/* Tab content */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeTab}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] as const }}
-            className="bg-abyss border border-white/5 rounded-2xl p-8 md:p-10"
-          >
-            <h3 className="font-display text-xl md:text-2xl font-semibold text-cloud mb-6 leading-snug">
-              {activeContent.headline}
-            </h3>
-            <ul className="space-y-3">
-              {activeContent.bullets.map((bullet) => (
-                <li key={bullet} className="flex items-start gap-3">
-                  <div className="flex-shrink-0 mt-1.5 w-1.5 h-1.5 rounded-full bg-ultraviolet" />
-                  <span className="text-mist text-sm leading-relaxed">
-                    {bullet}
-                  </span>
-                </li>
+              {/* Tab content */}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeTab.id}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2, ease }}
+                >
+                  <h3 className="font-display font-semibold text-xl text-cloud mb-3">
+                    {activeTab.headline}
+                  </h3>
+                  <p className="text-sm text-mist leading-relaxed mb-6">
+                    {activeTab.body}
+                  </p>
+                  <ul className="space-y-2">
+                    {activeTab.bullets.map((bullet) => (
+                      <li
+                        key={bullet}
+                        className="flex items-center gap-3 text-sm text-mist"
+                      >
+                        <span className="flex-shrink-0 w-1.5 h-px bg-cipher-mint" />
+                        {bullet}
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            {/* ── Right: proof chips ── */}
+            <div className="lg:col-span-4 flex flex-col gap-3">
+              {audience.proofChips.map((chip, i) => (
+                <motion.span
+                  key={chip}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-80px" }}
+                  transition={{ duration: 0.6, ease, delay: i * 0.06 }}
+                  className="text-xs px-3 py-2 rounded-lg border border-ultraviolet/10 text-mist/70 bg-ultraviolet/5"
+                >
+                  {chip}
+                </motion.span>
               ))}
-            </ul>
-          </motion.div>
-        </AnimatePresence>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
