@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { solution } from "@/content/home";
+import TiltCard from "./TiltCard";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -101,6 +102,8 @@ export default function SolutionSection() {
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.7, delay: 0.08 + i * 0.1, ease }}
+              >
+              <TiltCard
                 className="group relative rounded-3xl bg-abyss/40 border border-white/[0.06] p-8 lg:p-10 hover:border-ultraviolet/20 transition-all duration-500"
               >
                 {/* Hover glow */}
@@ -122,6 +125,7 @@ export default function SolutionSection() {
                 <p className="text-sm text-mist leading-relaxed">
                   {card.body}
                 </p>
+              </TiltCard>
               </motion.div>
             );
           })}

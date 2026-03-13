@@ -177,7 +177,7 @@ export default function DevelopersPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-4">
           <motion.div
             {...fadeUp(0)}
-            className="rounded-2xl bg-ultraviolet/10 border border-ultraviolet/20 px-6 py-5"
+            className="rounded-2xl bg-ultraviolet/10 border border-ultraviolet/20 px-6 py-5 shadow-[0_0_20px_rgba(122,92,255,0.06)]"
           >
             <span className="font-display font-semibold text-sm text-cloud">
               {developersPage.architectureLanes.confidential}
@@ -186,7 +186,7 @@ export default function DevelopersPage() {
 
           <motion.div
             {...fadeUp(0.08)}
-            className="rounded-2xl bg-cipher-mint/10 border border-cipher-mint/20 px-6 py-5"
+            className="rounded-2xl bg-cipher-mint/10 border border-cipher-mint/20 px-6 py-5 shadow-[0_0_20px_rgba(28,242,199,0.06)]"
           >
             <span className="font-display font-semibold text-sm text-cloud">
               {developersPage.architectureLanes.public}

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useCases } from "@/content/home";
+import TiltCard from "./TiltCard";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -68,7 +69,10 @@ export default function UseCaseGrid() {
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.7, delay: 0.05 + i * 0.08, ease }}
-              className={`group relative rounded-3xl bg-abyss/40 border border-white/[0.06] p-7 lg:p-8 transition-all duration-500 ${accents[i]} ${colSpan(i)}`}
+              className={colSpan(i)}
+            >
+            <TiltCard
+              className={`group relative rounded-3xl bg-abyss/40 border border-white/[0.06] p-7 lg:p-8 transition-all duration-500 h-full ${accents[i]}`}
             >
               {/* Hover glow */}
               <div
@@ -92,6 +96,7 @@ export default function UseCaseGrid() {
                   {card.example}
                 </p>
               </div>
+            </TiltCard>
             </motion.div>
           ))}
         </div>
