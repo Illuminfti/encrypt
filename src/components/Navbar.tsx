@@ -40,11 +40,8 @@ export default function Navbar() {
           <div className="flex h-8 items-center justify-between">
             {/* Wordmark */}
             <Link href="/" className="flex items-center group">
-              <span
-                className="font-display text-lg font-bold text-cloud transition-all group-hover:text-ultraviolet"
-                style={{ textShadow: "0 0 20px rgba(122,92,255,0.3)" }}
-              >
-                Encrypt
+              <span className="font-display text-xl font-bold text-cloud transition-all group-hover:text-ultraviolet">
+                <span className="text-gradient-uv">Encrypt</span>
               </span>
             </Link>
 

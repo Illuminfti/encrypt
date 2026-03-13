@@ -43,10 +43,7 @@ export default function Footer() {
         {/* Top section */}
         <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between mb-12">
           <div className="relative">
-            <span
-              className="font-display text-xl font-bold text-cloud"
-              style={{ textShadow: "0 0 24px rgba(122,92,255,0.3)" }}
-            >
+            <span className="font-display text-xl font-bold text-gradient-uv">
               {siteConfig.name}
             </span>
             <p className="mt-2 text-sm text-mist/70">{footerBrand.tagline}</p>

@@ -42,8 +42,8 @@ export default function CTASection() {
       />
 
       <div className="relative max-w-content mx-auto px-6 lg:px-8">
-        <h2 className="font-display font-bold text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-cloud max-w-3xl mx-auto leading-[1.1]">
-          <LetterReveal delay={0} staggerSpeed={0.02}>
+        <h2 className="font-display font-bold text-3xl md:text-4xl lg:text-5xl xl:text-6xl max-w-3xl mx-auto leading-[1.1]">
+          <LetterReveal className="text-gradient-uv" delay={0} staggerSpeed={0.02}>
             {finalCTA.headline}
           </LetterReveal>
         </h2>

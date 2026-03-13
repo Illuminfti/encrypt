@@ -70,7 +70,7 @@ export default function HeroSection() {
             </motion.p>
 
             {/* H1 — letter reveal + gradient */}
-            <h1 className="font-display font-bold text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-cloud leading-[1.05] tracking-tight">
+            <h1 className="font-display font-bold text-[2.5rem] md:text-5xl lg:text-6xl xl:text-[4.5rem] text-cloud leading-[1.05] tracking-tight">
               <LetterReveal delay={0.15} staggerSpeed={0.025}>
                 The
               </LetterReveal>{" "}
@@ -140,8 +140,8 @@ export default function HeroSection() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, ease, delay: 0.4 }}
           >
-            {/* Premium chassis panel */}
-            <div className="rounded-3xl border border-white/[0.08] bg-abyss/40 p-1.5 shadow-[0_20px_80px_rgba(0,0,0,0.4),0_0_60px_rgba(122,92,255,0.08)]">
+            {/* Premium chassis panel with animated glow */}
+            <div className="group/panel relative rounded-3xl border border-white/[0.08] bg-abyss/40 p-1.5 shadow-[0_20px_80px_rgba(0,0,0,0.4),0_0_60px_rgba(122,92,255,0.08)] hover:shadow-[0_20px_80px_rgba(0,0,0,0.4),0_0_80px_rgba(122,92,255,0.12)] transition-shadow duration-700">
               <div className="rounded-[20px] overflow-hidden relative">
                 {/* Soft ultraviolet orb behind */}
                 <div className="absolute w-[300px] h-[300px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(circle,rgba(122,92,255,0.15)_0%,transparent_70%)] pointer-events-none" />
