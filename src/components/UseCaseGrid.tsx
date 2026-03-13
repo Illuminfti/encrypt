@@ -40,15 +40,6 @@ export default function UseCaseGrid() {
       </div>
 
       <div className="relative max-w-content mx-auto px-6 lg:px-8">
-        {/* Section divider */}
-        <div
-          aria-hidden
-          className="mb-16 h-px"
-          style={{
-            background: "linear-gradient(90deg, rgba(28,242,199,0.2), transparent 60%)",
-          }}
-        />
-
         {/* Headline — left aligned */}
         <motion.h2
           initial={{ opacity: 0, y: 24 }}

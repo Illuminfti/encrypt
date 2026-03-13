@@ -23,15 +23,6 @@ export default function ArchitectureFlow() {
       </div>
 
       <div className="relative max-w-content mx-auto px-6 lg:px-8">
-        {/* Section divider */}
-        <div
-          aria-hidden
-          className="mb-16 h-px"
-          style={{
-            background: "linear-gradient(90deg, rgba(122,92,255,0.2), transparent 60%)",
-          }}
-        />
-
         <motion.h2
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}

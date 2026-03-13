@@ -25,19 +25,33 @@ export default function HeroSection() {
     >
       {/* ── Background layers ─────────────────────────────── */}
       <div className="pointer-events-none absolute inset-0 z-0">
-        {/* Faint grid */}
+        {/* Faint grid with fade */}
         <div
-          className="absolute inset-0 opacity-[0.02]"
+          className="absolute inset-0 opacity-[0.025]"
           style={{
             backgroundImage:
               "linear-gradient(to right, #91A2C7 1px, transparent 1px), linear-gradient(to bottom, #91A2C7 1px, transparent 1px)",
             backgroundSize: "80px 80px",
+            maskImage: "radial-gradient(ellipse 80% 70% at 30% 40%, black, transparent)",
+            WebkitMaskImage: "radial-gradient(ellipse 80% 70% at 30% 40%, black, transparent)",
           }}
         />
         {/* Gradient mesh — multi-orb depth */}
-        <div className="absolute -top-[200px] -right-[200px] w-[900px] h-[900px] rounded-full bg-ultraviolet/[0.08] blur-[200px]" />
-        <div className="absolute top-[60%] -left-[300px] w-[700px] h-[700px] rounded-full bg-cipher-mint/[0.04] blur-[180px]" />
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-prism-cyan/[0.03] blur-[160px]" />
+        <motion.div
+          className="absolute -top-[200px] -right-[200px] w-[900px] h-[900px] rounded-full bg-ultraviolet/[0.08] blur-[200px]"
+          animate={{ scale: [1, 1.05, 1], opacity: [0.08, 0.1, 0.08] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" as const }}
+        />
+        <motion.div
+          className="absolute top-[60%] -left-[300px] w-[700px] h-[700px] rounded-full bg-cipher-mint/[0.04] blur-[180px]"
+          animate={{ scale: [1, 1.08, 1], opacity: [0.04, 0.06, 0.04] }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" as const, delay: 3 }}
+        />
+        <motion.div
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-prism-cyan/[0.03] blur-[160px]"
+          animate={{ scale: [1, 1.06, 1] }}
+          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" as const, delay: 6 }}
+        />
         {/* Gradient fade at bottom */}
         <div className="absolute bottom-0 inset-x-0 h-48 bg-gradient-to-t from-void to-transparent" />
       </div>

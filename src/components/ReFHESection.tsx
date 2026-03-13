@@ -140,15 +140,6 @@ export default function ReFHESection() {
       </div>
 
       <div className="relative max-w-content mx-auto px-6 lg:px-8">
-        {/* Section divider */}
-        <div
-          aria-hidden
-          className="mb-16 h-px"
-          style={{
-            background: "linear-gradient(90deg, rgba(28,242,199,0.2), transparent 60%)",
-          }}
-        />
-
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
           {/* Left column */}
           <div>
