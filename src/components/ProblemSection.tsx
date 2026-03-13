@@ -291,7 +291,7 @@ export default function ProblemSection() {
       {/* Scanline effect */}
       <ScanlineOverlay />
 
-      <div className="relative max-w-content mx-auto px-6 lg:px-8">
+      <div className="relative max-w-5xl mx-auto px-6 lg:px-8">
         {/* Surveillance Eye */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}

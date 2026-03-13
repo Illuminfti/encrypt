@@ -46,7 +46,7 @@ const config: Config = {
       },
       maxWidth: {
         shell: "1440px",
-        content: "1440px",
+        content: "1200px",
       },
       animation: {
         float: "float 6s ease-in-out infinite",

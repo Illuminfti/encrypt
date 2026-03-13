@@ -63,8 +63,8 @@ export default function ReFHESection() {
           <EncryptionFlowDiagram />
         </motion.div>
 
-        {/* Chips + proof bullets in a centered row */}
-        <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-start lg:items-center justify-center">
+        {/* Chips + proof bullets — centered column layout */}
+        <div className="flex flex-col items-center gap-8">
           {/* Chips */}
           <motion.div
             initial={{ opacity: 0, y: 24 }}
@@ -84,7 +84,7 @@ export default function ReFHESection() {
           </motion.div>
 
           {/* Proof bullets */}
-          <div>
+          <div className="flex flex-wrap justify-center gap-x-8 gap-y-3">
             {reFhe.proofBullets.map((bullet, i) => (
               <motion.div
                 key={bullet}
@@ -92,9 +92,9 @@ export default function ReFHESection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-80px" }}
                 transition={{ duration: 0.6, delay: 0.4 + i * 0.08, ease }}
-                className="flex items-center gap-3 text-sm text-mist py-2"
+                className="flex items-center gap-3 text-sm text-mist"
               >
-                <div className="w-1.5 h-[6px] rounded-full bg-cipher-mint shrink-0" />
+                <div className="w-1.5 h-1.5 rounded-full bg-cipher-mint shrink-0" />
                 {bullet}
               </motion.div>
             ))}

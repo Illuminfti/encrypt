@@ -110,15 +110,15 @@ function PipelineDiagram() {
 
           {/* Flowing data packets */}
           <circle r="4" fill="#46CFFF" filter="url(#glow-cyan)" opacity="0.9">
-            <animateMotion dur="2s" repeatCount="indefinite" path="M 0,0 L 205,0" begin="0s" />
+            <animateMotion dur="2s" repeatCount="indefinite" path="M 195,130 L 400,130" begin="0s" />
             <animate attributeName="opacity" values="0;0.9;0.9;0" dur="2s" repeatCount="indefinite" />
           </circle>
           <circle r="3" fill="#7A5CFF" filter="url(#glow-violet)" opacity="0.7">
-            <animateMotion dur="2s" repeatCount="indefinite" path="M 0,0 L 205,0" begin="0.7s" />
+            <animateMotion dur="2s" repeatCount="indefinite" path="M 195,130 L 400,130" begin="0.7s" />
             <animate attributeName="opacity" values="0;0.7;0.7;0" dur="2s" repeatCount="indefinite" />
           </circle>
           <circle r="3.5" fill="#46CFFF" filter="url(#glow-cyan)" opacity="0.8">
-            <animateMotion dur="2s" repeatCount="indefinite" path="M 0,0 L 205,0" begin="1.3s" />
+            <animateMotion dur="2s" repeatCount="indefinite" path="M 195,130 L 400,130" begin="1.3s" />
             <animate attributeName="opacity" values="0;0.8;0.8;0" dur="2s" repeatCount="indefinite" />
           </circle>
 
@@ -138,15 +138,15 @@ function PipelineDiagram() {
           <line x1="615" y1="130" x2="790" y2="130" stroke="#46CFFF" strokeWidth="1" opacity="0.15" />
 
           <circle r="4" fill="#46CFFF" filter="url(#glow-cyan)" opacity="0.9">
-            <animateMotion dur="2.2s" repeatCount="indefinite" path="M 0,0 L 205,0" begin="0.2s" />
+            <animateMotion dur="2.2s" repeatCount="indefinite" path="M 600,130 L 805,130" begin="0.2s" />
             <animate attributeName="opacity" values="0;0.9;0.9;0" dur="2.2s" repeatCount="indefinite" />
           </circle>
           <circle r="3" fill="#7A5CFF" filter="url(#glow-violet)" opacity="0.7">
-            <animateMotion dur="2.2s" repeatCount="indefinite" path="M 0,0 L 205,0" begin="0.9s" />
+            <animateMotion dur="2.2s" repeatCount="indefinite" path="M 600,130 L 805,130" begin="0.9s" />
             <animate attributeName="opacity" values="0;0.7;0.7;0" dur="2.2s" repeatCount="indefinite" />
           </circle>
           <circle r="3.5" fill="#46CFFF" filter="url(#glow-cyan)" opacity="0.8">
-            <animateMotion dur="2.2s" repeatCount="indefinite" path="M 0,0 L 205,0" begin="1.5s" />
+            <animateMotion dur="2.2s" repeatCount="indefinite" path="M 600,130 L 805,130" begin="1.5s" />
             <animate attributeName="opacity" values="0;0.8;0.8;0" dur="2.2s" repeatCount="indefinite" />
           </circle>
 
@@ -271,11 +271,11 @@ function PipelineDiagram() {
             <animate attributeName="stroke-dashoffset" from="0" to="-16" dur="2s" repeatCount="indefinite" />
           </rect>
           <circle r="3.5" fill="#46CFFF" filter="url(#m-glow-cyan)" opacity="0.9">
-            <animateMotion dur="1.8s" repeatCount="indefinite" path="M 0,0 L 0,140" begin="0s" />
+            <animateMotion dur="1.8s" repeatCount="indefinite" path="M 160,70 L 160,210" begin="0s" />
             <animate attributeName="opacity" values="0;0.9;0.9;0" dur="1.8s" repeatCount="indefinite" />
           </circle>
           <circle r="2.5" fill="#7A5CFF" filter="url(#m-glow-violet)" opacity="0.7">
-            <animateMotion dur="1.8s" repeatCount="indefinite" path="M 0,0 L 0,140" begin="0.6s" />
+            <animateMotion dur="1.8s" repeatCount="indefinite" path="M 160,70 L 160,210" begin="0.6s" />
             <animate attributeName="opacity" values="0;0.7;0.7;0" dur="1.8s" repeatCount="indefinite" />
           </circle>
           <text x="210" y="145" fill="#91A2C7" fontSize="9" fontFamily="monospace" opacity="0.5">encrypted</text>
@@ -299,11 +299,11 @@ function PipelineDiagram() {
             <animate attributeName="stroke-dashoffset" from="0" to="-16" dur="2s" repeatCount="indefinite" />
           </rect>
           <circle r="3.5" fill="#46CFFF" filter="url(#m-glow-cyan)" opacity="0.9">
-            <animateMotion dur="2s" repeatCount="indefinite" path="M 0,0 L 0,140" begin="0.2s" />
+            <animateMotion dur="2s" repeatCount="indefinite" path="M 160,270 L 160,410" begin="0.2s" />
             <animate attributeName="opacity" values="0;0.9;0.9;0" dur="2s" repeatCount="indefinite" />
           </circle>
           <circle r="2.5" fill="#7A5CFF" filter="url(#m-glow-violet)" opacity="0.7">
-            <animateMotion dur="2s" repeatCount="indefinite" path="M 0,0 L 0,140" begin="0.8s" />
+            <animateMotion dur="2s" repeatCount="indefinite" path="M 160,270 L 160,410" begin="0.8s" />
             <animate attributeName="opacity" values="0;0.7;0.7;0" dur="2s" repeatCount="indefinite" />
           </circle>
           <text x="210" y="345" fill="#91A2C7" fontSize="9" fontFamily="monospace" opacity="0.5">encrypted</text>

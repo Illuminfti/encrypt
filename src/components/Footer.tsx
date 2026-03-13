@@ -42,22 +42,11 @@ export default function Footer() {
       <div className="mx-auto max-w-[1440px] px-6 lg:px-8 py-16 lg:py-20">
         {/* Top section */}
         <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between mb-12">
-          <div className="relative">
+          <div>
             <span className="font-display text-xl font-bold text-gradient-uv">
               {siteConfig.name}
             </span>
             <p className="mt-2 text-sm text-mist/70">{footerBrand.tagline}</p>
-            {/* Veilray */}
-            <svg
-              className="absolute -bottom-6 left-28 opacity-[0.03]"
-              width="48"
-              height="24"
-              viewBox="0 0 48 24"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path d="M24 0C10.745 0 0 8 0 12c4 4 10.745 12 24 12s20-8 24-12C44 8 37.255 0 24 0zm0 2c3 0 6 2 8 4l-8 14-8-14c2-2 5-4 8-4zm-14 8l6 10-10-6c1-2 2.5-3.5 4-4zm28 0c1.5.5 3 2 4 4l-10 6 6-10z" />
-            </svg>
           </div>
 
           {/* Social icons */}

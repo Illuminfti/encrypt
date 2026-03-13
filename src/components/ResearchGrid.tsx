@@ -172,8 +172,7 @@ export default function ResearchGrid() {
                 {card.href ? (
                   <Link
                     href={card.href}
-                    className="group block h-full rounded-2xl bg-abyss/60 border border-white/[0.06] p-8 transition-all duration-500 hover:border-opacity-100"
-                    style={{ ["--hover-border" as string]: config.border }}
+                    className="group block h-full rounded-2xl bg-abyss/60 border border-white/[0.06] p-8 transition-all duration-500 hover:border-white/[0.15] relative overflow-hidden"
                   >
                     <div
                       className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"

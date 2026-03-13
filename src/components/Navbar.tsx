@@ -37,7 +37,7 @@ export default function Navbar() {
         ].join(" ")}
       >
         <div className="mx-auto max-w-[1440px] px-6 lg:px-8">
-          <div className="flex h-8 items-center justify-between">
+          <div className="flex items-center justify-between">
             {/* Wordmark */}
             <Link href="/" className="flex items-center group">
               <span className="font-display text-xl font-bold text-cloud transition-all group-hover:text-ultraviolet">

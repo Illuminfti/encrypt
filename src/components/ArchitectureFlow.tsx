@@ -617,26 +617,27 @@ export default function ArchitectureFlow() {
 
       <div className="relative max-w-content mx-auto px-6 lg:px-8">
         {/* Headline */}
-        <motion.h2
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6, ease }}
-          className="font-display font-bold text-3xl md:text-4xl lg:text-display-md text-cloud text-left mb-4 leading-[1.1]"
-        >
-          {architecture.headline}
-        </motion.h2>
+        <div className="text-center mb-14 lg:mb-20">
+          <motion.h2
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.6, ease }}
+            className="font-display font-bold text-3xl md:text-4xl lg:text-display-md text-cloud leading-[1.1]"
+          >
+            {architecture.headline}
+          </motion.h2>
 
-        {/* Subtitle */}
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6, ease, delay: 0.1 }}
-          className="text-mist/60 text-sm md:text-base mb-14 lg:mb-20 max-w-xl"
-        >
-          Encrypted logic flows through the confidential lane, then settles publicly on Solana.
-        </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.6, ease, delay: 0.1 }}
+            className="text-mist/60 text-sm md:text-base mt-4 max-w-xl mx-auto"
+          >
+            Encrypted logic flows through the confidential lane, then settles publicly on Solana.
+          </motion.p>
+        </div>
 
         {/* ── Diagrams ── */}
         <DesktopDiagram />

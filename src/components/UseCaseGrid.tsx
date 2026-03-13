@@ -80,11 +80,10 @@ export default function UseCaseGrid() {
           {useCases.headline}
         </motion.h2>
 
-        {/* Bento grid — 3 columns with varied heights */}
+        {/* Grid — 3 columns, uniform cards */}
         <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {useCases.cards.map((card, i) => {
             const accent = accentColors[i];
-            const isLarge = i === 0 || i === 3;
 
             return (
               <motion.div
@@ -93,14 +92,10 @@ export default function UseCaseGrid() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.7, delay: 0.05 + i * 0.08, ease }}
-                className={`group relative ${isLarge ? "md:row-span-2" : ""}`}
+                className="group relative"
               >
                 <div
-                  className="relative h-full rounded-2xl border border-white/[0.06] bg-abyss/60 backdrop-blur-sm overflow-hidden transition-all duration-500 hover:border-opacity-100"
-                  style={{
-                    // @ts-expect-error custom property
-                    "--accent-border": accent.border,
-                  }}
+                  className="relative h-full rounded-2xl border border-white/[0.06] bg-abyss/60 backdrop-blur-sm overflow-hidden transition-all duration-500 hover:border-white/[0.15]"
                 >
                   {/* Top accent line */}
                   <motion.div
@@ -120,7 +115,7 @@ export default function UseCaseGrid() {
                     }}
                   />
 
-                  <div className={`relative p-7 lg:p-8 ${isLarge ? "lg:p-10" : ""}`}>
+                  <div className="relative p-7 lg:p-8">
                     {/* Icon + category */}
                     <div className="flex items-center gap-3 mb-5">
                       <div
