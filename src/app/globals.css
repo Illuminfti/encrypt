@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --void: #050816;
+  --abyss: #0B1123;
+  --ultraviolet: #7A5CFF;
+  --cipher-mint: #1CF2C7;
+  --prism-cyan: #46CFFF;
+  --signal-coral: #FF8E72;
+  --cloud: #F6F8FF;
+  --mist: #91A2C7;
+}
+
+body {
+  color: var(--cloud);
+  background: var(--void);
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
