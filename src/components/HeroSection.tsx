@@ -70,32 +70,41 @@ export default function HeroSection() {
             </motion.p>
 
             {/* H1 — letter reveal + gradient */}
-            <h1 className="font-display font-bold text-[2.5rem] md:text-5xl lg:text-6xl xl:text-[4.5rem] text-cloud leading-[1.05] tracking-tight">
-              <LetterReveal delay={0.15} staggerSpeed={0.025}>
+            <h1 className="font-display font-bold text-[2.5rem] md:text-[3.5rem] lg:text-[4rem] xl:text-[4.75rem] text-cloud leading-[1.05] tracking-tight text-balance">
+              <LetterReveal delay={0.15} staggerSpeed={0.02}>
                 The
               </LetterReveal>{" "}
               <LetterReveal
                 className="text-gradient-uv"
-                delay={0.25}
-                staggerSpeed={0.025}
+                delay={0.2}
+                staggerSpeed={0.02}
               >
                 confidential execution
-              </LetterReveal>{" "}
-              <LetterReveal delay={0.8} staggerSpeed={0.025}>
+              </LetterReveal>
+              <br className="hidden xl:block" />
+              {" "}
+              <LetterReveal delay={0.7} staggerSpeed={0.02}>
                 network for Solana
               </LetterReveal>
             </h1>
 
             {/* Subhead */}
             <motion.p
-              {...fadeUp(0.5)}
-              className="text-lg lg:text-xl text-mist mt-6 max-w-[520px] leading-relaxed"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease, delay: 0.9 }}
+              className="text-lg lg:text-xl text-mist mt-8 max-w-[520px] leading-relaxed"
             >
               {hero.subheadline}
             </motion.p>
 
             {/* CTAs */}
-            <motion.div {...fadeUp(0.6)} className="mt-10 flex flex-wrap items-center gap-4">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease, delay: 1.1 }}
+              className="mt-10 flex flex-wrap items-center gap-4"
+            >
               <SpinningBorderButton href={hero.primaryCTA.href}>
                 {hero.primaryCTA.label}
               </SpinningBorderButton>
@@ -118,7 +127,9 @@ export default function HeroSection() {
 
             {/* Micro-line */}
             <motion.p
-              {...fadeUp(0.7)}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, ease, delay: 1.4 }}
               className="text-sm text-mist/60 mt-8"
             >
               {hero.microLine}
@@ -126,7 +137,9 @@ export default function HeroSection() {
 
             {/* Caption */}
             <motion.p
-              {...fadeUp(0.75)}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, ease, delay: 1.5 }}
               className="text-xs text-mist/40 mt-2"
             >
               {hero.caption}
