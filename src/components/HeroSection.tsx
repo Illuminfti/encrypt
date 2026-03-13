@@ -1,10 +1,11 @@
 "use client";
 
-import { Suspense, lazy, useEffect, useState } from "react";
+import { Suspense, lazy, useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { hero } from "@/content/home";
 import SpinningBorderButton from "./SpinningBorderButton";
+import ScrambleText from "./ScrambleText";
 
 const NetworkVisualization = lazy(
   () => import("./3d/NetworkVisualization")
@@ -14,12 +15,28 @@ const ease = [0.22, 1, 0.36, 1] as const;
 
 export default function HeroSection() {
   const [mounted, setMounted] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
   useEffect(() => setMounted(true), []);
+
+  /* ── Mouse-reactive spotlight tracking ───────────────── */
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLElement>) => {
+    const section = sectionRef.current;
+    if (!section) return;
+    const rect = section.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    section.style.setProperty("--mouse-x", `${x}px`);
+    section.style.setProperty("--mouse-y", `${y}px`);
+  }, []);
 
   return (
     <section
+      ref={sectionRef}
       id="hero"
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      onMouseMove={handleMouseMove}
+      style={{ "--mouse-x": "50%", "--mouse-y": "50%" } as React.CSSProperties}
     >
       {/* ── 3D Background ─────────────────────────────────── */}
       {mounted && (
@@ -44,6 +61,14 @@ export default function HeroSection() {
         <div className="absolute bottom-0 inset-x-0 h-64 bg-gradient-to-t from-void via-void/80 to-transparent" />
         {/* Top fade */}
         <div className="absolute top-0 inset-x-0 h-32 bg-gradient-to-b from-void/50 to-transparent" />
+        {/* Mouse-reactive spotlight */}
+        <div
+          className="absolute inset-0 transition-opacity duration-300"
+          style={{
+            background:
+              "radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(122,92,255,0.06), transparent 40%)",
+          }}
+        />
       </div>
 
       {/* ── Content — Centered, cinematic ─────────────────── */}
@@ -63,10 +88,24 @@ export default function HeroSection() {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease, delay: 0.4 }}
-          className="font-display font-bold text-4xl sm:text-5xl lg:text-6xl xl:text-7xl text-cloud leading-[1.08] tracking-tight mx-auto max-w-4xl text-balance"
+          className="font-display font-bold text-4xl sm:text-5xl lg:text-display-lg xl:text-display-xl text-cloud leading-[1.08] tracking-tight mx-auto max-w-4xl text-balance"
+          style={{
+            backgroundImage:
+              "radial-gradient(400px circle at var(--mouse-x) var(--mouse-y), rgba(122,92,255,0.12), transparent 50%)",
+          }}
         >
           The{" "}
-          <span className="text-gradient-uv">confidential execution</span>
+          <span
+            className="text-gradient-uv"
+            style={{
+              filter:
+                "drop-shadow(0 0 20px rgba(122,92,255,0.15))",
+              textShadow:
+                "0 0 40px rgba(122,92,255,0.08)",
+            }}
+          >
+            confidential execution
+          </span>
           {" "}network for Solana
         </motion.h1>
 
@@ -107,15 +146,17 @@ export default function HeroSection() {
           </Link>
         </motion.div>
 
-        {/* Micro-line */}
-        <motion.p
+        {/* Micro-line with scramble effect */}
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, ease, delay: 1.3 }}
           className="text-sm text-mist/50 mt-10"
         >
-          {hero.microLine}
-        </motion.p>
+          <ScrambleText trigger="mount" delay={1.5} scrambleDuration={1.2}>
+            {hero.microLine}
+          </ScrambleText>
+        </motion.div>
       </div>
 
       {/* ── Scroll indicator ──────────────────────────────── */}

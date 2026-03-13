@@ -127,6 +127,11 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* ── Utilities ──────────────────────────────────────────────── */
+@layer base {
+  h1, h2, h3 { letter-spacing: -0.02em; }
+  h1 { letter-spacing: -0.03em; }
+}
+
 @layer utilities {
   .text-balance { text-wrap: balance; }
   .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }

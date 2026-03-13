@@ -82,6 +82,11 @@ const config: Config = {
           "50%": { backgroundPosition: "100% 50%" },
         },
       },
+      fontSize: {
+        "display-xl": ["5.5rem", { lineHeight: "1.05", letterSpacing: "-0.04em" }],
+        "display-lg": ["4rem", { lineHeight: "1.08", letterSpacing: "-0.03em" }],
+        "display-md": ["3rem", { lineHeight: "1.1", letterSpacing: "-0.02em" }],
+      },
       borderRadius: {
         "3xl": "1.5rem",
       },
