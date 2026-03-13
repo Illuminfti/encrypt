@@ -10,8 +10,8 @@ const ease = [0.22, 1, 0.36, 1] as const;
 
 function fadeUp(delay: number) {
   return {
-    initial: { opacity: 0, y: 20 },
-    whileInView: { opacity: 1, y: 0 },
+    initial: { opacity: 0, y: 30, scale: 0.98 },
+    whileInView: { opacity: 1, y: 0, scale: 1 },
     viewport: { once: true },
     transition: { duration: 0.6, ease, delay },
   };
@@ -40,7 +40,7 @@ function FAQItem({
     <motion.div {...fadeUp(index * 0.06)} className="border-b border-white/[0.06] last:border-b-0">
       <button
         onClick={() => setOpen(!open)}
-        className="flex w-full items-center justify-between py-5 text-left"
+        className="flex w-full items-center justify-between py-5 text-left rounded-lg px-2 -mx-2 hover:bg-white/[0.02] transition-colors"
       >
         <span className="font-display font-medium text-base text-cloud pr-4">
           {question}
@@ -75,18 +75,22 @@ export default function ResearchPage() {
       <Navbar />
 
       {/* Hero */}
-      <section className="py-32 lg:py-40">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="relative py-32 lg:py-40 overflow-hidden">
+        {/* Gradient orbs */}
+        <div className="pointer-events-none absolute -top-40 -left-40 h-[600px] w-[600px] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(122,92,255,0.08),transparent_70%)]" />
+        <div className="pointer-events-none absolute -bottom-40 -right-40 h-[500px] w-[500px] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(28,242,199,0.06),transparent_70%)]" />
+
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.span
             {...animateUp(0)}
-            className="text-sm font-medium text-cipher-mint tracking-wide uppercase mb-4 block"
+            className="text-sm font-medium text-cipher-mint tracking-[0.2em] uppercase mb-4 block"
           >
             {researchPage.eyebrow}
           </motion.span>
 
           <motion.h1
             {...animateUp(0.1)}
-            className="font-display font-bold text-4xl md:text-5xl text-cloud max-w-3xl"
+            className="font-display font-bold text-4xl md:text-5xl lg:text-6xl leading-[1.05] text-cloud max-w-3xl"
           >
             {researchPage.headline}
           </motion.h1>
@@ -104,7 +108,7 @@ export default function ResearchPage() {
       <section className="py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-16">
           {researchPage.sections.map((section, i) => (
-            <motion.div key={section.title} {...fadeUp(i * 0.1)} className="max-w-2xl">
+            <motion.div key={section.title} {...fadeUp(i * 0.1)} className="max-w-3xl">
               <h2 className="font-display font-semibold text-2xl text-cloud mb-4">
                 {section.title}
               </h2>
@@ -169,7 +173,7 @@ export default function ResearchPage() {
             Frequently asked questions
           </motion.h2>
 
-          <div className="max-w-2xl">
+          <div className="max-w-3xl">
             {researchPage.faq.map((item, i) => (
               <FAQItem
                 key={item.question}

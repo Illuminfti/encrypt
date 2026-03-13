@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { getFooterColumns, getSocialLinks, footerBrand } from "@/content/footer";
 import { siteConfig } from "@/lib/site-config";
@@ -26,21 +28,31 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-abyss border-t border-white/[0.06]">
+    <footer className="relative bg-abyss border-t border-white/[0.06]">
+      {/* Top gradient accent line */}
+      <div
+        aria-hidden
+        className="absolute top-0 inset-x-0 h-px"
+        style={{
+          background:
+            "linear-gradient(90deg, transparent, rgba(122,92,255,0.2), rgba(28,242,199,0.15), transparent)",
+        }}
+      />
+
       <div className="mx-auto max-w-[1440px] px-6 lg:px-8 py-16 lg:py-20">
         {/* Top section */}
         <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between mb-12">
           <div className="relative">
             <span
-              className="font-display text-lg font-bold text-cloud"
-              style={{ textShadow: "0 0 20px rgba(122,92,255,0.3)" }}
+              className="font-display text-xl font-bold text-cloud"
+              style={{ textShadow: "0 0 24px rgba(122,92,255,0.3)" }}
             >
               {siteConfig.name}
             </span>
-            <p className="mt-2 text-sm text-mist">{footerBrand.tagline}</p>
+            <p className="mt-2 text-sm text-mist/70">{footerBrand.tagline}</p>
             {/* Veilray */}
             <svg
-              className="absolute -bottom-6 left-24 opacity-[0.03]"
+              className="absolute -bottom-6 left-28 opacity-[0.03]"
               width="48"
               height="24"
               viewBox="0 0 48 24"
@@ -52,7 +64,7 @@ export default function Footer() {
           </div>
 
           {/* Social icons */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             {socialLinks.map((social) => (
               <a
                 key={social.label}
@@ -60,7 +72,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={social.label}
-                className="flex h-9 w-9 items-center justify-center rounded-lg text-mist transition-colors hover:bg-white/[0.06] hover:text-cloud"
+                className="flex h-9 w-9 items-center justify-center rounded-lg text-mist/60 border border-white/[0.06] transition-all hover:bg-white/[0.06] hover:text-cloud hover:border-white/[0.12]"
               >
                 {socialIcons[social.icon]}
               </a>
@@ -72,7 +84,7 @@ export default function Footer() {
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-4">
           {columns.map((column) => (
             <div key={column.title}>
-              <h3 className="text-xs uppercase tracking-wider text-mist/60 mb-4">
+              <h3 className="text-xs uppercase tracking-[0.15em] text-mist/50 mb-4 font-medium">
                 {column.title}
               </h3>
               <ul className="space-y-3">
@@ -83,14 +95,14 @@ export default function Footer() {
                         href={link.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-sm text-mist transition-colors hover:text-cloud"
+                        className="text-sm text-mist/70 transition-colors hover:text-cloud"
                       >
                         {link.label}
                       </a>
                     ) : (
                       <Link
                         href={link.href}
-                        className="text-sm text-mist transition-colors hover:text-cloud"
+                        className="text-sm text-mist/70 transition-colors hover:text-cloud"
                       >
                         {link.label}
                       </Link>
@@ -104,8 +116,8 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="mt-16 flex flex-col gap-4 border-t border-white/[0.06] pt-8 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs text-mist/50">{footerBrand.footnote}</p>
-          <p className="text-xs text-mist/50">
+          <p className="text-xs text-mist/40">{footerBrand.footnote}</p>
+          <p className="text-xs text-mist/40">
             &copy; {year} {siteConfig.name}
           </p>
         </div>

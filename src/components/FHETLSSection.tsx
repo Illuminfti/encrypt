@@ -124,7 +124,7 @@ export default function FHETLSSection() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-80px" }}
                   transition={{ duration: 0.6, ease, delay: i * 0.1 }}
-                  className="rounded-3xl bg-abyss/60 border border-white/[0.06] p-8"
+                  className="group rounded-3xl bg-abyss/60 border border-white/[0.06] p-8 hover:border-prism-cyan/15 transition-all duration-500"
                 >
                   <p className="text-xs font-display text-prism-cyan/60 mb-2">
                     Step {step.step}
@@ -230,7 +230,7 @@ export default function FHETLSSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-80px" }}
                 transition={{ duration: 0.6, ease, delay: i * 0.08 }}
-                className="rounded-3xl bg-abyss/60 border border-white/[0.06] p-8"
+                className="group rounded-3xl bg-abyss/60 border border-white/[0.06] p-8 hover:border-prism-cyan/15 transition-all duration-500"
               >
                 <p className="text-xs font-display text-prism-cyan/60 mb-2">
                   Step {step.step}

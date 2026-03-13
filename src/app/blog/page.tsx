@@ -9,8 +9,8 @@ const ease = [0.22, 1, 0.36, 1] as const;
 
 function fadeUp(delay: number) {
   return {
-    initial: { opacity: 0, y: 20 },
-    whileInView: { opacity: 1, y: 0 },
+    initial: { opacity: 0, y: 30, scale: 0.98 },
+    whileInView: { opacity: 1, y: 0, scale: 1 },
     viewport: { once: true },
     transition: { duration: 0.6, ease, delay },
   };
@@ -77,11 +77,15 @@ export default function BlogPage() {
       <Navbar />
 
       {/* Hero */}
-      <section className="py-32 lg:py-40">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="relative py-32 lg:py-40 overflow-hidden">
+        {/* Gradient orbs */}
+        <div className="pointer-events-none absolute -top-40 -left-40 h-[600px] w-[600px] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(122,92,255,0.08),transparent_70%)]" />
+        <div className="pointer-events-none absolute -bottom-40 -right-40 h-[500px] w-[500px] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(28,242,199,0.06),transparent_70%)]" />
+
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.h1
             {...animateUp(0)}
-            className="font-display font-bold text-4xl md:text-5xl text-cloud"
+            className="font-display font-bold text-4xl md:text-5xl lg:text-6xl leading-[1.05] text-cloud"
           >
             {blogPage.headline}
           </motion.h1>
@@ -100,20 +104,23 @@ export default function BlogPage() {
               <motion.div
                 key={post.title}
                 {...fadeUp(i * 0.08)}
-                className="rounded-3xl bg-abyss/40 border border-white/[0.06] overflow-hidden transition-colors hover:border-white/[0.1]"
+                className="group relative rounded-3xl bg-abyss/40 border border-white/[0.06] overflow-hidden transition-colors hover:border-white/[0.1]"
               >
-                <WordBarThumbnail gradient={post.gradient} seed={i} />
+                <div className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(ellipse_at_center,rgba(28,242,199,0.04),transparent_70%)]" />
+                <div className="relative">
+                  <WordBarThumbnail gradient={post.gradient} seed={i} />
 
-                <div className="p-6">
-                  <span className="text-[10px] uppercase tracking-wider text-ultraviolet/60 mb-2 block">
-                    {post.label}
-                  </span>
-                  <h2 className="font-display font-semibold text-base text-cloud mb-2">
-                    {post.title}
-                  </h2>
-                  <p className="text-sm text-mist leading-relaxed">
-                    {post.excerpt}
-                  </p>
+                  <div className="p-6">
+                    <span className="text-[10px] uppercase tracking-wider text-ultraviolet/60 mb-2 block">
+                      {post.label}
+                    </span>
+                    <h2 className="font-display font-semibold text-base text-cloud mb-2">
+                      {post.title}
+                    </h2>
+                    <p className="text-sm text-mist leading-relaxed">
+                      {post.excerpt}
+                    </p>
+                  </div>
                 </div>
               </motion.div>
             ))}

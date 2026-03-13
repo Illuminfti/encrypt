@@ -2,12 +2,15 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { getNavItems, getNavCTAs } from "@/content/navigation";
+import SpinningBorderButton from "./SpinningBorderButton";
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
 
   const navItems = getNavItems();
   const navCTAs = getNavCTAs();
@@ -21,22 +24,24 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const isActive = (href: string) => pathname === href;
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
       <nav
         className={[
-          "backdrop-blur-md transition-all duration-200",
+          "backdrop-blur-md transition-all duration-300",
           scrolled
-            ? "bg-abyss/80 border-b border-white/[0.1] py-3"
-            : "bg-abyss/60 border-b border-white/[0.06] py-4",
+            ? "bg-abyss/80 border-b border-white/[0.08] py-3"
+            : "bg-transparent border-b border-transparent py-5",
         ].join(" ")}
       >
         <div className="mx-auto max-w-[1440px] px-6 lg:px-8">
           <div className="flex h-8 items-center justify-between">
             {/* Wordmark */}
-            <Link href="/" className="flex items-center">
+            <Link href="/" className="flex items-center group">
               <span
-                className="font-display text-lg font-bold text-cloud"
+                className="font-display text-lg font-bold text-cloud transition-all group-hover:text-ultraviolet"
                 style={{ textShadow: "0 0 20px rgba(122,92,255,0.3)" }}
               >
                 Encrypt
@@ -45,14 +50,22 @@ export default function Navbar() {
 
             {/* Desktop nav links */}
             <div className="hidden md:flex items-center gap-8">
-              {navItems.map((item) =>
-                item.external ? (
+              {navItems.map((item) => {
+                const active = !item.external && isActive(item.href);
+                const classes = [
+                  "text-sm transition-colors relative",
+                  active
+                    ? "text-cloud font-medium"
+                    : "text-mist hover:text-cloud",
+                ].join(" ");
+
+                return item.external ? (
                   <a
                     key={item.href}
                     href={item.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-mist transition-colors hover:text-cloud"
+                    className={classes}
                   >
                     {item.label}
                   </a>
@@ -60,29 +73,38 @@ export default function Navbar() {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="text-sm text-mist transition-colors hover:text-cloud"
+                    className={classes}
                   >
                     {item.label}
+                    {active && (
+                      <motion.div
+                        layoutId="navActiveIndicator"
+                        className="absolute -bottom-1 left-0 right-0 h-px bg-ultraviolet"
+                        transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                      />
+                    )}
                   </Link>
-                )
-              )}
+                );
+              })}
             </div>
 
             {/* Desktop CTAs */}
             <div className="hidden md:flex items-center gap-3">
-              {navCTAs.map((cta) => (
-                <Link
-                  key={cta.href}
-                  href={cta.href}
-                  className={
-                    cta.variant === "primary"
-                      ? "bg-ultraviolet text-cloud text-sm px-4 py-2 rounded-lg transition-all hover:shadow-[0_4px_20px_rgba(122,92,255,0.4)]"
-                      : "border border-ultraviolet/40 text-cloud text-sm px-4 py-2 rounded-lg transition-all hover:bg-ultraviolet/10"
-                  }
-                >
-                  {cta.label}
-                </Link>
-              ))}
+              {navCTAs.map((cta) =>
+                cta.variant === "primary" ? (
+                  <SpinningBorderButton key={cta.href} href={cta.href}>
+                    {cta.label}
+                  </SpinningBorderButton>
+                ) : (
+                  <Link
+                    key={cta.href}
+                    href={cta.href}
+                    className="border border-white/10 text-cloud text-sm px-4 py-2 rounded-xl transition-all hover:border-white/25 hover:bg-white/[0.04]"
+                  >
+                    {cta.label}
+                  </Link>
+                )
+              )}
             </div>
 
             {/* Mobile hamburger */}
@@ -155,8 +177,9 @@ export default function Navbar() {
 
               {/* Mobile nav links */}
               <div className="flex flex-col gap-1">
-                {navItems.map((item) =>
-                  item.external ? (
+                {navItems.map((item) => {
+                  const active = !item.external && isActive(item.href);
+                  return item.external ? (
                     <a
                       key={item.href}
                       href={item.href}
@@ -172,12 +195,14 @@ export default function Navbar() {
                       key={item.href}
                       href={item.href}
                       onClick={() => setMobileOpen(false)}
-                      className="block rounded-lg px-4 py-3 text-base text-mist transition-colors hover:bg-white/[0.04] hover:text-cloud"
+                      className={`block rounded-lg px-4 py-3 text-base transition-colors hover:bg-white/[0.04] ${
+                        active ? "text-cloud bg-ultraviolet/5" : "text-mist hover:text-cloud"
+                      }`}
                     >
                       {item.label}
                     </Link>
-                  )
-                )}
+                  );
+                })}
               </div>
 
               {/* Mobile CTAs */}
@@ -189,8 +214,8 @@ export default function Navbar() {
                     onClick={() => setMobileOpen(false)}
                     className={
                       cta.variant === "primary"
-                        ? "rounded-lg bg-ultraviolet px-4 py-3 text-center text-sm text-cloud transition-all hover:shadow-[0_4px_20px_rgba(122,92,255,0.4)]"
-                        : "rounded-lg border border-ultraviolet/40 px-4 py-3 text-center text-sm text-cloud transition-all hover:bg-ultraviolet/10"
+                        ? "rounded-xl bg-ultraviolet px-4 py-3 text-center text-sm text-cloud transition-all hover:shadow-[0_4px_20px_rgba(122,92,255,0.4)]"
+                        : "rounded-xl border border-white/10 px-4 py-3 text-center text-sm text-cloud transition-all hover:bg-white/[0.04]"
                     }
                   >
                     {cta.label}
