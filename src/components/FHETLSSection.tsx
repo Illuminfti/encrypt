@@ -3,6 +3,7 @@
 import { useRef, useEffect, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { fheTls } from "@/content/home";
+import ScrambleText from "./ScrambleText";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -363,7 +364,7 @@ export default function FHETLSSection() {
             transition={{ duration: 0.6, ease, delay: 0.05 }}
             className="font-display font-bold text-3xl md:text-4xl lg:text-[3.25rem] text-cloud leading-[1.1]"
           >
-            {fheTls.headline}
+            <ScrambleText scrambleDuration={1.5}>{fheTls.headline}</ScrambleText>
           </motion.h2>
 
           <motion.p

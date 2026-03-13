@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { problem } from "@/content/home";
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
+import ScrambleText from "./ScrambleText";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -315,15 +316,13 @@ export default function ProblemSection() {
             {problem.eyebrow}
           </motion.p>
 
-          <motion.h2
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.6, delay: 0.08, ease }}
+          <h2
             className="font-display font-bold text-3xl md:text-4xl lg:text-display-md text-cloud leading-[1.1]"
           >
-            {problem.headline}
-          </motion.h2>
+            <ScrambleText scrambleDuration={1.8}>
+              {problem.headline}
+            </ScrambleText>
+          </h2>
 
           <motion.p
             initial={{ opacity: 0, y: 24 }}
