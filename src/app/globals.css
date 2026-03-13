@@ -1,7 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ── Design Tokens ──────────────────────────────────────────── */
 :root {
   --void: #050816;
   --abyss: #0B1123;
@@ -11,13 +14,234 @@
   --signal-coral: #FF8E72;
   --cloud: #F6F8FF;
   --mist: #91A2C7;
+
+  --ultraviolet-50: rgba(122, 92, 255, 0.5);
+  --ultraviolet-20: rgba(122, 92, 255, 0.2);
+  --ultraviolet-10: rgba(122, 92, 255, 0.1);
+  --cipher-mint-50: rgba(28, 242, 199, 0.5);
+  --cipher-mint-20: rgba(28, 242, 199, 0.2);
+  --prism-cyan-50: rgba(70, 207, 255, 0.5);
+  --prism-cyan-20: rgba(70, 207, 255, 0.2);
+
+  --gradient-ultraviolet: linear-gradient(135deg, #7A5CFF 0%, #46CFFF 100%);
+  --gradient-mint: linear-gradient(135deg, #1CF2C7 0%, #46CFFF 100%);
+  --gradient-coral: linear-gradient(135deg, #FF8E72 0%, #7A5CFF 100%);
+  --gradient-hero: linear-gradient(180deg, #050816 0%, #0B1123 50%, #050816 100%);
+  --gradient-radial-uv: radial-gradient(ellipse at center, rgba(122, 92, 255, 0.15) 0%, transparent 70%);
+  --gradient-radial-mint: radial-gradient(ellipse at center, rgba(28, 242, 199, 0.1) 0%, transparent 70%);
+}
+
+/* ── Base ────────────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
 }
 
 body {
+  background-color: var(--void);
   color: var(--cloud);
+  font-family: var(--font-manrope), 'Manrope', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* ── Typography ─────────────────────────────────────────────── */
+.font-display {
+  font-family: var(--font-space-grotesk), 'Space Grotesk', sans-serif;
+}
+
+.font-body {
+  font-family: var(--font-manrope), 'Manrope', sans-serif;
+}
+
+/* ── Selection ──────────────────────────────────────────────── */
+::selection {
+  background-color: var(--ultraviolet-50);
+  color: var(--cloud);
+}
+
+::-moz-selection {
+  background-color: var(--ultraviolet-50);
+  color: var(--cloud);
+}
+
+/* ── Scrollbar (Dark) ───────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
   background: var(--void);
 }
 
+::-webkit-scrollbar-thumb {
+  background: rgba(122, 92, 255, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(122, 92, 255, 0.5);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(122, 92, 255, 0.3) var(--void);
+}
+
+/* ── Noise Overlay ──────────────────────────────────────────── */
+.noise-overlay::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* ── Glass Effects ──────────────────────────────────────────── */
+.glass {
+  background: rgba(11, 17, 35, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(122, 92, 255, 0.1);
+}
+
+.glass-strong {
+  background: rgba(11, 17, 35, 0.8);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(122, 92, 255, 0.15);
+}
+
+.glass-light {
+  background: rgba(11, 17, 35, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(122, 92, 255, 0.08);
+}
+
+/* ── Gradient Text ──────────────────────────────────────────── */
+.gradient-text-uv,
+.text-gradient-uv {
+  background: var(--gradient-ultraviolet);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-mint,
+.text-gradient-mint {
+  background: var(--gradient-mint);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-coral,
+.text-gradient-coral {
+  background: var(--gradient-coral);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Glow Effects ───────────────────────────────────────────── */
+.glow-uv {
+  box-shadow: 0 0 20px rgba(122, 92, 255, 0.3), 0 0 60px rgba(122, 92, 255, 0.1);
+}
+
+.glow-mint {
+  box-shadow: 0 0 20px rgba(28, 242, 199, 0.3), 0 0 60px rgba(28, 242, 199, 0.1);
+}
+
+.glow-cyan {
+  box-shadow: 0 0 20px rgba(70, 207, 255, 0.3), 0 0 60px rgba(70, 207, 255, 0.1);
+}
+
+.text-glow-uv {
+  text-shadow: 0 0 20px rgba(122, 92, 255, 0.5);
+}
+
+.text-glow-mint {
+  text-shadow: 0 0 20px rgba(28, 242, 199, 0.5);
+}
+
+/* ── Gradient Border ────────────────────────────────────────── */
+.gradient-border {
+  position: relative;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--gradient-ultraviolet);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ── Hover Lift ─────────────────────────────────────────────── */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(122, 92, 255, 0.2);
+}
+
+/* ── Animated Underline ─────────────────────────────────────── */
+.animated-underline {
+  position: relative;
+}
+
+.animated-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--gradient-ultraviolet);
+  transition: width 0.3s ease;
+}
+
+.animated-underline:hover::after {
+  width: 100%;
+}
+
+/* ── Section Divider ────────────────────────────────────────── */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(122, 92, 255, 0.3) 50%, transparent 100%);
+}
+
+/* ── Focus Styles ───────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--ultraviolet);
+  outline-offset: 2px;
+}
+
+/* ── Links ──────────────────────────────────────────────────── */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ── Tailwind Layers ────────────────────────────────────────── */
 @layer utilities {
   .text-balance {
     text-wrap: balance;
@@ -30,5 +254,84 @@ body {
 
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+
+  .bg-radial-uv {
+    background: var(--gradient-radial-uv);
+  }
+
+  .bg-radial-mint {
+    background: var(--gradient-radial-mint);
+  }
+}
+
+@layer components {
+  .section-padding {
+    @apply px-6 py-20 md:px-8 md:py-28 lg:px-12 lg:py-32;
+  }
+
+  .section-container {
+    @apply mx-auto max-w-7xl;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-lg px-6 py-3 font-display font-semibold text-sm tracking-wide transition-all duration-300;
+    background: var(--gradient-ultraviolet);
+    color: var(--cloud);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 8px 30px rgba(122, 92, 255, 0.4);
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-lg px-6 py-3 font-display font-semibold text-sm tracking-wide transition-all duration-300;
+    background: transparent;
+    border: 1px solid rgba(122, 92, 255, 0.4);
+    color: var(--cloud);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--ultraviolet);
+    background: rgba(122, 92, 255, 0.1);
+  }
+
+  .card {
+    @apply rounded-2xl p-6 md:p-8;
+    background: rgba(11, 17, 35, 0.6);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(122, 92, 255, 0.1);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card:hover {
+    border-color: rgba(122, 92, 255, 0.25);
+    box-shadow: 0 8px 32px rgba(122, 92, 255, 0.1);
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium;
+    background: rgba(122, 92, 255, 0.1);
+    border: 1px solid rgba(122, 92, 255, 0.2);
+    color: var(--ultraviolet);
+  }
+
+  .badge-mint {
+    background: rgba(28, 242, 199, 0.1);
+    border: 1px solid rgba(28, 242, 199, 0.2);
+    color: var(--cipher-mint);
+  }
+}
+
+/* ── Reduced Motion ─────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
