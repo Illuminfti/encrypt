@@ -308,7 +308,11 @@ export default function ProblemSection() {
             className="font-display font-bold text-3xl md:text-4xl lg:text-display-md text-cloud leading-[1.1]"
           >
             <ScrambleText scrambleDuration={1.8}>
-              {problem.headline}
+              Everything composable.
+            </ScrambleText>
+            <br />
+            <ScrambleText scrambleDuration={1.8} delay={0.3}>
+              Everything visible.
             </ScrambleText>
           </h2>
 
