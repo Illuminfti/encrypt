@@ -52,6 +52,9 @@ const config: Config = {
         float: "float 6s ease-in-out infinite",
         "pulse-glow": "pulse-glow 4s ease-in-out infinite",
         "fade-in-up": "fade-in-up 0.6s ease-out forwards",
+        marquee: "marquee var(--marquee-speed, 30s) linear infinite",
+        "spin-border": "spin-border 3s linear infinite",
+        "gradient-shift": "gradient-shift 8s ease-in-out infinite",
       },
       keyframes: {
         float: {
@@ -65,6 +68,18 @@ const config: Config = {
         "fade-in-up": {
           "0%": { opacity: "0", transform: "translateY(20px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        marquee: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
+        "spin-border": {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" },
+        },
+        "gradient-shift": {
+          "0%, 100%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
         },
       },
       borderRadius: {

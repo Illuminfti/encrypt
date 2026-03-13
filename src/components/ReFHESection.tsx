@@ -133,8 +133,22 @@ function BitDecompDiagram() {
 
 export default function ReFHESection() {
   return (
-    <section id="re-fhe" className="py-24 lg:py-36">
-      <div className="max-w-content mx-auto px-6 lg:px-8">
+    <section id="re-fhe" className="relative py-24 lg:py-36 overflow-hidden">
+      {/* Background gradient */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute top-1/3 right-0 w-[500px] h-[500px] rounded-full bg-cipher-mint/[0.03] blur-[160px]" />
+      </div>
+
+      <div className="relative max-w-content mx-auto px-6 lg:px-8">
+        {/* Section divider */}
+        <div
+          aria-hidden
+          className="mb-16 h-px"
+          style={{
+            background: "linear-gradient(90deg, rgba(28,242,199,0.2), transparent 60%)",
+          }}
+        />
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
           {/* Left column */}
           <div>
@@ -143,7 +157,7 @@ export default function ReFHESection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.6, ease }}
-              className="text-xs uppercase tracking-widest text-cipher-mint mb-4"
+              className="text-xs uppercase tracking-[0.2em] text-cipher-mint mb-4 font-medium"
             >
               {reFhe.eyebrow}
             </motion.p>
@@ -153,7 +167,7 @@ export default function ReFHESection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.6, delay: 0.08, ease }}
-              className="font-display font-bold text-3xl md:text-4xl text-cloud"
+              className="font-display font-bold text-3xl md:text-4xl lg:text-5xl text-cloud leading-[1.1]"
             >
               {reFhe.headline}
             </motion.h2>

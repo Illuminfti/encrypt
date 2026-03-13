@@ -44,7 +44,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${spaceGrotesk.variable} ${manrope.variable} font-body antialiased`}
+        className={`${spaceGrotesk.variable} ${manrope.variable} font-body antialiased noise-overlay`}
       >
         {children}
       </body>

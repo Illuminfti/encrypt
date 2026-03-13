@@ -35,7 +35,7 @@ export default function FHETLSSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-80px" }}
                 transition={{ duration: 0.6, ease }}
-                className="text-xs uppercase tracking-widest text-prism-cyan mb-4"
+                className="text-xs uppercase tracking-[0.2em] text-prism-cyan mb-4 font-medium"
               >
                 {fheTls.eyebrow}
               </motion.p>
@@ -45,7 +45,7 @@ export default function FHETLSSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-80px" }}
                 transition={{ duration: 0.6, ease, delay: 0.05 }}
-                className="font-display font-bold text-3xl md:text-4xl text-cloud"
+                className="font-display font-bold text-3xl md:text-4xl lg:text-5xl text-cloud leading-[1.1]"
               >
                 {fheTls.headline}
               </motion.h2>
@@ -55,7 +55,7 @@ export default function FHETLSSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-80px" }}
                 transition={{ duration: 0.6, ease, delay: 0.1 }}
-                className="text-base text-mist mt-4 max-w-md"
+                className="text-base lg:text-lg text-mist mt-4 max-w-md leading-relaxed"
               >
                 {fheTls.body}
               </motion.p>
@@ -86,9 +86,12 @@ export default function FHETLSSection() {
               >
                 <Link
                   href="/research"
-                  className="text-sm text-ultraviolet hover:text-cloud transition-colors"
+                  className="group inline-flex items-center gap-1.5 text-sm text-ultraviolet hover:text-cloud transition-colors"
                 >
-                  Read Research &rarr;
+                  Read Research
+                  <svg className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5">
+                    <path d="M2 6h8M7 3l3 3-3 3" />
+                  </svg>
                 </Link>
               </motion.div>
             </div>
@@ -160,7 +163,7 @@ export default function FHETLSSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.6, ease }}
-              className="text-xs uppercase tracking-widest text-prism-cyan mb-4"
+              className="text-xs uppercase tracking-[0.2em] text-prism-cyan mb-4 font-medium"
             >
               {fheTls.eyebrow}
             </motion.p>

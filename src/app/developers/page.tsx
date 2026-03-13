@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { developersPage } from "@/content/pages";
+import SpinningBorderButton from "@/components/SpinningBorderButton";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -211,19 +212,19 @@ export default function DevelopersPage() {
       <section className="py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center gap-4">
           {primaryCTA.href && (
-            <Link
-              href={primaryCTA.href}
-              className="inline-flex items-center rounded-lg bg-ultraviolet px-6 py-3 text-sm font-medium text-white transition-all hover:bg-ultraviolet/85 hover:shadow-[0_0_24px_rgba(122,92,255,0.3)]"
-            >
+            <SpinningBorderButton href={primaryCTA.href}>
               {primaryCTA.label}
-            </Link>
+            </SpinningBorderButton>
           )}
           {secondaryCTA.href && (
             <Link
               href={secondaryCTA.href}
-              className="inline-flex items-center rounded-lg border border-white/10 px-6 py-3 text-sm font-medium text-cloud transition-all hover:border-white/25 hover:bg-white/[0.04]"
+              className="group inline-flex items-center gap-2 rounded-xl border border-white/10 px-6 py-3 text-sm font-medium text-cloud transition-all hover:border-white/25 hover:bg-white/[0.04]"
             >
               {secondaryCTA.label}
+              <svg className="w-4 h-4 text-mist group-hover:text-cloud group-hover:translate-x-0.5 transition-all" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M3 8h10M9 4l4 4-4 4" />
+              </svg>
             </Link>
           )}
         </div>

@@ -11,16 +11,16 @@ export default function AudienceTabs() {
   const activeTab = audience.tabs[activeIdx];
 
   return (
-    <section id="audience" className="py-24 lg:py-36">
+    <section id="audience" className="relative py-24 lg:py-36">
       <div className="max-w-content mx-auto px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 30, scale: 0.99 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6, ease }}
-          className="rounded-3xl bg-abyss/40 border border-white/[0.06] p-8 lg:p-12"
+          transition={{ duration: 0.8, ease }}
+          className="rounded-3xl bg-abyss/50 border border-white/[0.06] p-8 lg:p-12 shadow-[0_20px_60px_rgba(0,0,0,0.2)]"
         >
-          <h2 className="font-display font-bold text-2xl md:text-3xl text-cloud mb-10">
+          <h2 className="font-display font-bold text-2xl md:text-3xl lg:text-4xl text-cloud mb-10 leading-[1.1]">
             {audience.headline}
           </h2>
 
@@ -28,7 +28,7 @@ export default function AudienceTabs() {
             {/* ── Left: tabs + content ── */}
             <div className="lg:col-span-8">
               {/* Tab bar */}
-              <div className="flex gap-1 bg-abyss/60 rounded-xl p-1 mb-8">
+              <div className="flex gap-1 bg-void/60 rounded-xl p-1 mb-8">
                 {audience.tabs.map((tab, i) => (
                   <button
                     key={tab.id}
@@ -42,7 +42,7 @@ export default function AudienceTabs() {
                     {activeIdx === i && (
                       <motion.div
                         layoutId="audienceActiveTab"
-                        className="absolute inset-0 rounded-lg bg-ultraviolet/10"
+                        className="absolute inset-0 rounded-lg bg-ultraviolet/15 border border-ultraviolet/10"
                         transition={{
                           type: "spring",
                           stiffness: 400,
@@ -59,10 +59,10 @@ export default function AudienceTabs() {
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeTab.id}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.2, ease }}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.25, ease }}
                 >
                   <h3 className="font-display font-semibold text-xl text-cloud mb-3">
                     {activeTab.headline}
@@ -70,13 +70,13 @@ export default function AudienceTabs() {
                   <p className="text-sm text-mist leading-relaxed mb-6">
                     {activeTab.body}
                   </p>
-                  <ul className="space-y-2">
+                  <ul className="space-y-2.5">
                     {activeTab.bullets.map((bullet) => (
                       <li
                         key={bullet}
                         className="flex items-center gap-3 text-sm text-mist"
                       >
-                        <span className="flex-shrink-0 w-1.5 h-px bg-cipher-mint" />
+                        <span className="flex-shrink-0 w-1 h-1 rounded-full bg-cipher-mint" />
                         {bullet}
                       </li>
                     ))}
@@ -90,11 +90,11 @@ export default function AudienceTabs() {
               {audience.proofChips.map((chip, i) => (
                 <motion.span
                   key={chip}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, margin: "-80px" }}
-                  transition={{ duration: 0.6, ease, delay: i * 0.06 }}
-                  className="text-xs px-3 py-2 rounded-lg border border-ultraviolet/10 text-mist/70 bg-ultraviolet/5"
+                  transition={{ duration: 0.5, ease, delay: i * 0.08 }}
+                  className="text-xs px-3 py-2.5 rounded-lg border border-ultraviolet/10 text-mist/70 bg-ultraviolet/5 hover:bg-ultraviolet/8 transition-colors"
                 >
                   {chip}
                 </motion.span>
