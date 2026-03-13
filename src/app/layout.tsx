@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, Manrope } from "next/font/google";
 import { siteConfig } from "@/lib/site-config";
+import SmoothScroll from "@/components/SmoothScroll";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -46,6 +47,7 @@ export default function RootLayout({
       <body
         className={`${spaceGrotesk.variable} ${manrope.variable} font-body antialiased noise-overlay`}
       >
+        <SmoothScroll />
         {children}
       </body>
     </html>

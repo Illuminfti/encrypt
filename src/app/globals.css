@@ -57,10 +57,17 @@ body {
 
 /* ── Gradient Text ──────────────────────────────────────────── */
 .text-gradient-uv {
-  background: linear-gradient(135deg, #7A5CFF, #46CFFF);
+  background: linear-gradient(135deg, #7A5CFF, #46CFFF, #7A5CFF);
+  background-size: 200% 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  animation: shimmer-uv 6s ease-in-out infinite;
+}
+
+@keyframes shimmer-uv {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
 .text-gradient-mint {

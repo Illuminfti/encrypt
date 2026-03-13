@@ -23,13 +23,17 @@ export default function LetterReveal({
   const prefersReducedMotion = useReducedMotion();
 
   if (prefersReducedMotion) {
-    return <Tag className={className}>{children}</Tag>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const SafeTag = Tag as any;
+    return <SafeTag className={className}>{children}</SafeTag>;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const SafeTag = Tag as any;
   const characters = children.split("");
 
   return (
-    <Tag className={className} aria-label={children}>
+    <SafeTag className={className} aria-label={children}>
       {characters.map((char, i) => (
         <motion.span
           key={`${char}-${i}`}
@@ -47,6 +51,6 @@ export default function LetterReveal({
           {char === " " ? "\u00A0" : char}
         </motion.span>
       ))}
-    </Tag>
+    </SafeTag>
   );
 }

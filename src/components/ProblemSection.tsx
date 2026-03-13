@@ -1,133 +1,398 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { problem } from "@/content/home";
-import TiltCard from "./TiltCard";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-/* ── Mini SVG motifs (NOT lucide) ─────────────────────── */
+const HEX_CHARS = "0123456789abcdef";
+const STREAM_LENGTH = 32;
 
-function EyeMotif() {
+/* ── Surveillance Eye SVG ─────────────────────────────────── */
+
+function SurveillanceEye({ active }: { active: boolean }) {
   return (
-    <svg width="32" height="32" viewBox="0 0 28 28" fill="none" aria-hidden>
-      <circle cx="14" cy="14" r="8" stroke="currentColor" strokeWidth="1" opacity="0.35" />
-      <circle cx="14" cy="14" r="3.5" stroke="currentColor" strokeWidth="1" opacity="0.5" />
-      <line x1="3" y1="14" x2="25" y2="14" stroke="currentColor" strokeWidth="0.75" opacity="0.25" />
-    </svg>
+    <motion.svg
+      width="64"
+      height="64"
+      viewBox="0 0 64 64"
+      fill="none"
+      aria-hidden
+      className="mx-auto"
+      animate={active ? { scale: [1, 1.05, 1] } : {}}
+      transition={active ? { duration: 2, repeat: Infinity, ease: "easeInOut" } : {}}
+    >
+      {/* Outer eye shape */}
+      <motion.path
+        d="M8 32 Q32 8 56 32 Q32 56 8 32Z"
+        stroke="#FF8E72"
+        strokeWidth="1.5"
+        fill="none"
+        initial={{ pathLength: 0, opacity: 0 }}
+        animate={active ? { pathLength: 1, opacity: 0.6 } : {}}
+        transition={{ duration: 1.5, ease: "easeOut" }}
+      />
+      {/* Inner iris */}
+      <motion.circle
+        cx="32"
+        cy="32"
+        r="10"
+        stroke="#FF8E72"
+        strokeWidth="1"
+        fill="none"
+        initial={{ scale: 0, opacity: 0 }}
+        animate={active ? { scale: 1, opacity: 0.5 } : {}}
+        transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
+      />
+      {/* Pupil */}
+      <motion.circle
+        cx="32"
+        cy="32"
+        r="4"
+        fill="#FF8E72"
+        initial={{ scale: 0, opacity: 0 }}
+        animate={active ? { scale: 1, opacity: 0.7 } : {}}
+        transition={{ duration: 0.5, delay: 0.8, ease: "easeOut" }}
+      />
+      {/* Scan lines */}
+      {[18, 26, 34, 42, 50].map((y, i) => (
+        <motion.line
+          key={y}
+          x1="12"
+          y1={y}
+          x2="52"
+          y2={y}
+          stroke="#FF8E72"
+          strokeWidth="0.3"
+          initial={{ opacity: 0 }}
+          animate={active ? { opacity: [0, 0.15, 0] } : {}}
+          transition={active ? { duration: 2, delay: i * 0.2, repeat: Infinity } : {}}
+        />
+      ))}
+    </motion.svg>
   );
 }
 
-function GridMotif() {
+/* ── Hex Stream Cell ──────────────────────────────────────── */
+
+function HexCell({
+  active,
+  delay,
+  reducedMotion,
+}: {
+  active: boolean;
+  delay: number;
+  reducedMotion: boolean;
+}) {
+  const [char, setChar] = useState(() =>
+    HEX_CHARS[Math.floor(Math.random() * 16)]
+  );
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    if (!active || reducedMotion) return;
+    const timeout = setTimeout(() => {
+      intervalRef.current = setInterval(() => {
+        setChar(HEX_CHARS[Math.floor(Math.random() * 16)]);
+      }, 80 + Math.random() * 120);
+    }, delay);
+    return () => {
+      clearTimeout(timeout);
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [active, delay, reducedMotion]);
+
   return (
-    <svg width="32" height="32" viewBox="0 0 28 28" fill="none" aria-hidden>
-      {[0, 1, 2, 3].map((row) =>
-        [0, 1, 2, 3].map((col) => (
-          <circle
-            key={`${row}-${col}`}
-            cx={7 + col * 5}
-            cy={7 + row * 5}
-            r="1.2"
-            fill="currentColor"
-            opacity="0.4"
-          />
-        ))
-      )}
-    </svg>
+    <span
+      className={`
+        inline-block w-[1ch] text-center font-mono text-xs sm:text-sm
+        transition-all duration-300
+        ${active ? "text-signal-coral/80" : "text-mist/20"}
+      `}
+    >
+      {char}
+    </span>
   );
 }
 
-function WaveMotif() {
+/* ── Data Stream Row ──────────────────────────────────────── */
+
+function DataStreamRow({
+  card,
+  index,
+  isInView,
+  reducedMotion,
+}: {
+  card: { title: string; body: string };
+  index: number;
+  isInView: boolean;
+  reducedMotion: boolean;
+}) {
+  const [rowActive, setRowActive] = useState(false);
+
+  useEffect(() => {
+    if (!isInView) return;
+    const timeout = setTimeout(
+      () => setRowActive(true),
+      reducedMotion ? 0 : 400 + index * 600
+    );
+    return () => clearTimeout(timeout);
+  }, [isInView, index, reducedMotion]);
+
+  const cells = useMemo(
+    () =>
+      Array.from({ length: STREAM_LENGTH }, (_, i) => (
+        <HexCell
+          key={i}
+          active={rowActive}
+          delay={i * 30}
+          reducedMotion={!!reducedMotion}
+        />
+      )),
+    [rowActive, reducedMotion]
+  );
+
   return (
-    <svg width="32" height="32" viewBox="0 0 28 28" fill="none" aria-hidden>
-      <path d="M6 14 Q10 8 14 14 Q18 20 22 14" stroke="currentColor" strokeWidth="1" opacity="0.4" fill="none" />
-      <path d="M6 10 Q10 4 14 10 Q18 16 22 10" stroke="currentColor" strokeWidth="0.75" opacity="0.3" fill="none" />
-      <path d="M6 18 Q10 12 14 18 Q18 24 22 18" stroke="currentColor" strokeWidth="0.75" opacity="0.3" fill="none" />
-    </svg>
+    <motion.div
+      initial={{ opacity: 0, x: -30 }}
+      animate={isInView ? { opacity: 1, x: 0 } : {}}
+      transition={{
+        duration: reducedMotion ? 0 : 0.7,
+        delay: reducedMotion ? 0 : 0.2 + index * 0.3,
+        ease,
+      }}
+      className="group relative"
+    >
+      {/* Row container */}
+      <div
+        className={`
+          relative flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-8
+          rounded-2xl border px-6 py-5
+          transition-all duration-700
+          ${
+            rowActive
+              ? "border-signal-coral/20 bg-signal-coral/[0.03]"
+              : "border-white/[0.04] bg-abyss/40"
+          }
+        `}
+      >
+        {/* Glow effect when active */}
+        <div
+          className={`
+            pointer-events-none absolute inset-0 rounded-2xl
+            transition-opacity duration-1000
+            bg-[radial-gradient(ellipse_at_left,rgba(255,142,114,0.06),transparent_60%)]
+            ${rowActive ? "opacity-100" : "opacity-0"}
+          `}
+        />
+
+        {/* Left: problem info */}
+        <div className="relative z-10 flex-shrink-0 lg:w-[280px] xl:w-[340px]">
+          {/* Status indicator */}
+          <div className="flex items-center gap-2 mb-2">
+            <span
+              className={`
+                block w-1.5 h-1.5 rounded-full transition-colors duration-500
+                ${rowActive ? "bg-signal-coral animate-pulse" : "bg-mist/30"}
+              `}
+            />
+            <span className="text-[10px] uppercase tracking-[0.2em] text-signal-coral/70 font-mono">
+              STREAM {String(index + 1).padStart(2, "0")}
+            </span>
+          </div>
+          <h3 className="font-display font-semibold text-base text-cloud leading-snug">
+            {card.title}
+          </h3>
+          <p className="text-xs text-mist/70 mt-1 leading-relaxed max-w-[300px] hidden lg:block">
+            {card.body}
+          </p>
+        </div>
+
+        {/* Right: hex data stream */}
+        <div className="relative z-10 flex-1 overflow-hidden">
+          {/* Stream container */}
+          <div className="relative flex items-center gap-px">
+            {/* Exposed data indicator */}
+            <div
+              className={`
+                flex-shrink-0 mr-3 px-2 py-0.5 rounded text-[9px] uppercase tracking-widest font-mono
+                border transition-all duration-700
+                ${
+                  rowActive
+                    ? "border-signal-coral/40 text-signal-coral bg-signal-coral/10"
+                    : "border-white/[0.06] text-mist/30 bg-transparent"
+                }
+              `}
+            >
+              {rowActive ? "EXPOSED" : "IDLE"}
+            </div>
+
+            {/* Hex characters */}
+            <div className="flex gap-[2px] flex-wrap sm:flex-nowrap">
+              {cells}
+            </div>
+
+            {/* Fade out right edge */}
+            <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-abyss/80 to-transparent pointer-events-none" />
+          </div>
+
+          {/* Mobile: show body text */}
+          <p className="text-xs text-mist/60 mt-2 leading-relaxed lg:hidden">
+            {card.body}
+          </p>
+        </div>
+      </div>
+    </motion.div>
   );
 }
 
-const motifs = [EyeMotif, GridMotif, WaveMotif];
+/* ── Scanline Overlay ─────────────────────────────────────── */
+
+function ScanlineOverlay() {
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden opacity-[0.03]">
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,142,114,0.4) 2px, rgba(255,142,114,0.4) 3px)",
+          backgroundSize: "100% 4px",
+        }}
+      />
+    </div>
+  );
+}
+
+/* ── Main Section ─────────────────────────────────────────── */
 
 export default function ProblemSection() {
+  const reducedMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const [isInView, setIsInView] = useState(false);
+
+  const handleInView = useCallback(() => {
+    setIsInView(true);
+  }, []);
+
   return (
-    <section id="problem" className="relative py-24 lg:py-36 overflow-hidden">
-      {/* Subtle section bg gradient */}
+    <section
+      id="problem"
+      ref={sectionRef}
+      className="relative py-24 lg:py-36 overflow-hidden"
+    >
+      {/* Background effects */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-signal-coral/[0.03] blur-[160px]" />
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-signal-coral/[0.03] blur-[180px]" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-signal-coral/[0.02] blur-[120px]" />
       </div>
 
+      {/* Scanline effect */}
+      <ScanlineOverlay />
+
       <div className="relative max-w-content mx-auto px-6 lg:px-8">
-        {/* Header — left aligned */}
-        <motion.p
-          initial={{ opacity: 0, x: -20 }}
-          whileInView={{ opacity: 1, x: 0 }}
+        {/* Surveillance Eye */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6, ease }}
-          className="text-xs uppercase tracking-[0.2em] text-signal-coral mb-4 font-medium"
+          transition={{ duration: 0.8, ease }}
+          onViewportEnter={handleInView}
+          className="flex justify-center mb-10"
         >
-          {problem.eyebrow}
-        </motion.p>
+          <SurveillanceEye active={isInView} />
+        </motion.div>
 
-        <motion.h2
-          initial={{ opacity: 0, y: 24 }}
+        {/* Header — centered for impact */}
+        <div className="text-center max-w-2xl mx-auto mb-6">
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.6, ease }}
+            className="text-xs uppercase tracking-[0.25em] text-signal-coral mb-4 font-mono"
+          >
+            {problem.eyebrow}
+          </motion.p>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.6, delay: 0.08, ease }}
+            className="font-display font-bold text-3xl md:text-4xl lg:text-5xl text-cloud leading-[1.1]"
+          >
+            {problem.headline}
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.6, delay: 0.16, ease }}
+            className="text-lg text-mist mt-5 leading-relaxed"
+          >
+            {problem.body}
+          </motion.p>
+        </div>
+
+        {/* Terminal header bar */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6, delay: 0.08, ease }}
-          className="font-display font-bold text-3xl md:text-4xl lg:text-5xl text-cloud max-w-lg leading-[1.1]"
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.6, delay: 0.2, ease }}
+          className="mt-14 mb-3"
         >
-          {problem.headline}
-        </motion.h2>
+          <div className="flex items-center gap-3 px-4 py-2 rounded-t-xl bg-abyss/80 border border-b-0 border-white/[0.06]">
+            {/* Terminal dots */}
+            <div className="flex gap-1.5">
+              <span className="block w-2 h-2 rounded-full bg-signal-coral/60" />
+              <span className="block w-2 h-2 rounded-full bg-signal-coral/30" />
+              <span className="block w-2 h-2 rounded-full bg-signal-coral/15" />
+            </div>
+            <span className="text-[10px] font-mono uppercase tracking-[0.15em] text-mist/40">
+              blockchain_surveillance_monitor_v1.0
+            </span>
+            <div className="ml-auto flex items-center gap-2">
+              <span
+                className={`block w-1.5 h-1.5 rounded-full ${
+                  isInView ? "bg-signal-coral animate-pulse" : "bg-mist/20"
+                }`}
+              />
+              <span className="text-[9px] font-mono text-signal-coral/50 uppercase">
+                {isInView ? "monitoring" : "standby"}
+              </span>
+            </div>
+          </div>
+        </motion.div>
 
-        <motion.p
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6, delay: 0.16, ease }}
-          className="text-lg text-mist mt-4 max-w-lg leading-relaxed"
-        >
-          {problem.body}
-        </motion.p>
+        {/* Data stream rows */}
+        <div className="space-y-3 rounded-b-xl border border-white/[0.06] bg-abyss/40 p-4 backdrop-blur-sm">
+          {problem.cards.map((card, i) => (
+            <DataStreamRow
+              key={card.title}
+              card={card}
+              index={i}
+              isInView={isInView}
+              reducedMotion={!!reducedMotion}
+            />
+          ))}
 
-        {/* Cards — asymmetric 12-col grid */}
-        <div className="mt-16 grid grid-cols-1 lg:grid-cols-12 gap-5">
-          {problem.cards.map((card, i) => {
-            const Motif = motifs[i];
-            const span =
-              i === 0
-                ? "lg:col-span-5 lg:row-span-2"
-                : "lg:col-span-7";
-
-            return (
-              <motion.div
-                key={card.title}
-                initial={{ opacity: 0, y: 30, scale: 0.98 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.7, delay: 0.1 + i * 0.1, ease }}
-                className={span}
-              >
-              <TiltCard
-                className={`group relative rounded-3xl bg-abyss/60 border border-white/[0.06] p-8 lg:p-10 hover:border-signal-coral/20 transition-all duration-500`}
-              >
-                {/* Hover glow */}
-                <div className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(ellipse_at_top_right,rgba(255,142,114,0.04),transparent_70%)]" />
-
-                {/* Mini SVG in top-right */}
-                <div className="relative text-signal-coral mb-6">
-                  <Motif />
-                </div>
-
-                <h3 className="font-display font-semibold text-lg text-cloud mb-3">
-                  {card.title}
-                </h3>
-                <p className="text-sm text-mist leading-relaxed max-w-[360px]">
-                  {card.body}
-                </p>
-              </TiltCard>
-              </motion.div>
-            );
-          })}
+          {/* Bottom status bar */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : {}}
+            transition={{ duration: 0.5, delay: 2.5 }}
+            className="flex items-center justify-between pt-3 border-t border-white/[0.04] mt-4"
+          >
+            <span className="text-[9px] font-mono text-mist/30 uppercase tracking-widest">
+              3 / 3 data vectors exposed
+            </span>
+            <span className="text-[9px] font-mono text-signal-coral/40 uppercase tracking-widest">
+              confidentiality: none
+            </span>
+          </motion.div>
         </div>
       </div>
     </section>

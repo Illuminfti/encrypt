@@ -1,169 +1,137 @@
 "use client";
 
+import { Suspense, lazy, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { hero } from "@/content/home";
-import HeroVisual from "./HeroVisual";
-import LetterReveal from "./LetterReveal";
 import SpinningBorderButton from "./SpinningBorderButton";
+
+const NetworkVisualization = lazy(
+  () => import("./3d/NetworkVisualization")
+);
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-function fadeUp(delay: number) {
-  return {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.6, ease, delay },
-  };
-}
-
 export default function HeroSection() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* ── Background layers ─────────────────────────────── */}
-      <div className="pointer-events-none absolute inset-0 z-0">
-        {/* Faint grid with fade */}
+      {/* ── 3D Background ─────────────────────────────────── */}
+      {mounted && (
+        <Suspense fallback={null}>
+          <div className="absolute inset-0 z-0 opacity-70">
+            <NetworkVisualization />
+          </div>
+        </Suspense>
+      )}
+
+      {/* ── Gradient overlays for text readability ─────────── */}
+      <div className="pointer-events-none absolute inset-0 z-[1]">
+        {/* Center radial darken for text */}
         <div
-          className="absolute inset-0 opacity-[0.025]"
+          className="absolute inset-0"
           style={{
-            backgroundImage:
-              "linear-gradient(to right, #91A2C7 1px, transparent 1px), linear-gradient(to bottom, #91A2C7 1px, transparent 1px)",
-            backgroundSize: "80px 80px",
-            maskImage: "radial-gradient(ellipse 80% 70% at 30% 40%, black, transparent)",
-            WebkitMaskImage: "radial-gradient(ellipse 80% 70% at 30% 40%, black, transparent)",
+            background:
+              "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(5,8,22,0.7) 0%, rgba(5,8,22,0.3) 60%, transparent 100%)",
           }}
         />
-        {/* Gradient mesh — multi-orb depth */}
-        <motion.div
-          className="absolute -top-[200px] -right-[200px] w-[900px] h-[900px] rounded-full bg-ultraviolet/[0.08] blur-[200px]"
-          animate={{ scale: [1, 1.05, 1], opacity: [0.08, 0.1, 0.08] }}
-          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" as const }}
-        />
-        <motion.div
-          className="absolute top-[60%] -left-[300px] w-[700px] h-[700px] rounded-full bg-cipher-mint/[0.04] blur-[180px]"
-          animate={{ scale: [1, 1.08, 1], opacity: [0.04, 0.06, 0.04] }}
-          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" as const, delay: 3 }}
-        />
-        <motion.div
-          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-prism-cyan/[0.03] blur-[160px]"
-          animate={{ scale: [1, 1.06, 1] }}
-          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" as const, delay: 6 }}
-        />
-        {/* Gradient fade at bottom */}
-        <div className="absolute bottom-0 inset-x-0 h-48 bg-gradient-to-t from-void to-transparent" />
+        {/* Bottom fade */}
+        <div className="absolute bottom-0 inset-x-0 h-64 bg-gradient-to-t from-void via-void/80 to-transparent" />
+        {/* Top fade */}
+        <div className="absolute top-0 inset-x-0 h-32 bg-gradient-to-b from-void/50 to-transparent" />
       </div>
 
-      {/* ── Content ────────────────────────────────────────── */}
-      <div className="relative z-10 max-w-[1440px] mx-auto px-6 lg:px-8 py-24 md:py-32 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-          {/* ── Left column ──────────────────────────────── */}
-          <div className="lg:col-span-7">
-            {/* Eyebrow */}
-            <motion.p
-              {...fadeUp(0.1)}
-              className="text-xs uppercase tracking-[0.2em] text-cipher-mint mb-6 font-medium"
-            >
-              {hero.eyebrow}
-            </motion.p>
+      {/* ── Content — Centered, cinematic ─────────────────── */}
+      <div className="relative z-10 max-w-[1200px] mx-auto px-6 lg:px-8 text-center py-32">
+        {/* Eyebrow */}
+        <motion.p
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease, delay: 0.2 }}
+          className="text-xs uppercase tracking-[0.3em] text-cipher-mint mb-8 font-medium"
+        >
+          {hero.eyebrow}
+        </motion.p>
 
-            {/* H1 — letter reveal + gradient */}
-            <h1 className="font-display font-bold text-[2.5rem] md:text-[3.5rem] lg:text-[4rem] xl:text-[4.75rem] text-cloud leading-[1.05] tracking-tight text-balance">
-              <LetterReveal delay={0.15} staggerSpeed={0.02}>
-                The
-              </LetterReveal>{" "}
-              <LetterReveal
-                className="text-gradient-uv"
-                delay={0.2}
-                staggerSpeed={0.02}
-              >
-                confidential execution
-              </LetterReveal>
-              <br className="hidden xl:block" />
-              {" "}
-              <LetterReveal delay={0.7} staggerSpeed={0.02}>
-                network for Solana
-              </LetterReveal>
-            </h1>
+        {/* H1 — Large, centered, balanced */}
+        <motion.h1
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease, delay: 0.4 }}
+          className="font-display font-bold text-4xl sm:text-5xl lg:text-6xl xl:text-7xl text-cloud leading-[1.08] tracking-tight mx-auto max-w-4xl text-balance"
+        >
+          The{" "}
+          <span className="text-gradient-uv">confidential execution</span>
+          {" "}network for Solana
+        </motion.h1>
 
-            {/* Subhead */}
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease, delay: 0.9 }}
-              className="text-lg lg:text-xl text-mist mt-8 max-w-[520px] leading-relaxed"
-            >
-              {hero.subheadline}
-            </motion.p>
+        {/* Subhead */}
+        <motion.p
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease, delay: 0.7 }}
+          className="text-lg lg:text-xl text-mist/80 mt-6 max-w-xl mx-auto leading-relaxed"
+        >
+          {hero.subheadline}
+        </motion.p>
 
-            {/* CTAs */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease, delay: 1.1 }}
-              className="mt-10 flex flex-wrap items-center gap-4"
-            >
-              <SpinningBorderButton href={hero.primaryCTA.href}>
-                {hero.primaryCTA.label}
-              </SpinningBorderButton>
-              <Link
-                href={hero.secondaryCTA.href}
-                className="group inline-flex items-center gap-2 border border-white/10 text-cloud px-6 py-3 rounded-xl font-display font-semibold text-sm hover:border-white/25 hover:bg-white/[0.04] transition-all"
-              >
-                {hero.secondaryCTA.label}
-                <svg
-                  className="w-4 h-4 text-mist group-hover:text-cloud group-hover:translate-x-0.5 transition-all"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                >
-                  <path d="M3 8h10M9 4l4 4-4 4" />
-                </svg>
-              </Link>
-            </motion.div>
-
-            {/* Micro-line */}
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, ease, delay: 1.4 }}
-              className="text-sm text-mist/60 mt-8"
-            >
-              {hero.microLine}
-            </motion.p>
-
-            {/* Caption */}
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, ease, delay: 1.5 }}
-              className="text-xs text-mist/40 mt-2"
-            >
-              {hero.caption}
-            </motion.p>
-          </div>
-
-          {/* ── Right column ─────────────────────────────── */}
-          <motion.div
-            className="lg:col-span-5"
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, ease, delay: 0.4 }}
+        {/* CTAs */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease, delay: 1.0 }}
+          className="mt-10 flex flex-wrap items-center justify-center gap-4"
+        >
+          <SpinningBorderButton href={hero.primaryCTA.href}>
+            {hero.primaryCTA.label}
+          </SpinningBorderButton>
+          <Link
+            href={hero.secondaryCTA.href}
+            className="group inline-flex items-center gap-2 border border-white/10 text-cloud px-6 py-3 rounded-xl font-display font-semibold text-sm hover:border-white/25 hover:bg-white/[0.04] transition-all"
           >
-            {/* Premium chassis panel with animated glow */}
-            <div className="group/panel relative rounded-3xl border border-white/[0.08] bg-abyss/40 p-1.5 shadow-[0_20px_80px_rgba(0,0,0,0.4),0_0_60px_rgba(122,92,255,0.08)] hover:shadow-[0_20px_80px_rgba(0,0,0,0.4),0_0_80px_rgba(122,92,255,0.12)] transition-shadow duration-700">
-              <div className="rounded-[20px] overflow-hidden relative">
-                {/* Soft ultraviolet orb behind */}
-                <div className="absolute w-[300px] h-[300px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(circle,rgba(122,92,255,0.15)_0%,transparent_70%)] pointer-events-none" />
-                <HeroVisual />
-              </div>
-            </div>
-          </motion.div>
-        </div>
+            {hero.secondaryCTA.label}
+            <svg
+              className="w-4 h-4 text-mist group-hover:text-cloud group-hover:translate-x-0.5 transition-all"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            >
+              <path d="M3 8h10M9 4l4 4-4 4" />
+            </svg>
+          </Link>
+        </motion.div>
+
+        {/* Micro-line */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, ease, delay: 1.3 }}
+          className="text-sm text-mist/50 mt-10"
+        >
+          {hero.microLine}
+        </motion.p>
       </div>
+
+      {/* ── Scroll indicator ──────────────────────────────── */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2, duration: 1 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
+      >
+        <span className="text-[10px] uppercase tracking-[0.2em] text-mist/40">Scroll</span>
+        <motion.div
+          animate={{ y: [0, 6, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+          className="w-px h-8 bg-gradient-to-b from-ultraviolet/40 to-transparent"
+        />
+      </motion.div>
     </section>
   );
 }
