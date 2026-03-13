@@ -156,8 +156,8 @@ function DataStreamRow({
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: -30 }}
-      animate={isInView ? { opacity: 1, x: 0 } : {}}
+      initial={{ opacity: 0, y: 20 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{
         duration: reducedMotion ? 0 : 0.7,
         delay: reducedMotion ? 0 : 0.2 + index * 0.3,
@@ -165,11 +165,10 @@ function DataStreamRow({
       }}
       className="group relative"
     >
-      {/* Row container */}
+      {/* Row container — stacked layout for symmetry */}
       <div
         className={`
-          relative flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-8
-          rounded-2xl border px-6 py-5
+          relative rounded-2xl border px-6 py-5
           transition-all duration-700
           ${
             rowActive
@@ -183,15 +182,14 @@ function DataStreamRow({
           className={`
             pointer-events-none absolute inset-0 rounded-2xl
             transition-opacity duration-1000
-            bg-[radial-gradient(ellipse_at_left,rgba(255,142,114,0.06),transparent_60%)]
+            bg-[radial-gradient(ellipse_at_top,rgba(255,142,114,0.06),transparent_60%)]
             ${rowActive ? "opacity-100" : "opacity-0"}
           `}
         />
 
-        {/* Left: problem info */}
-        <div className="relative z-10 flex-shrink-0 lg:w-[280px] xl:w-[340px]">
-          {/* Status indicator */}
-          <div className="flex items-center gap-2 mb-2">
+        {/* Top: status + title + body */}
+        <div className="relative z-10 mb-3">
+          <div className="flex items-center gap-3 mb-2">
             <span
               className={`
                 block w-1.5 h-1.5 rounded-full transition-colors duration-500
@@ -201,23 +199,10 @@ function DataStreamRow({
             <span className="text-[10px] uppercase tracking-[0.2em] text-signal-coral/70 font-mono">
               STREAM {String(index + 1).padStart(2, "0")}
             </span>
-          </div>
-          <h3 className="font-display font-semibold text-base text-cloud leading-snug">
-            {card.title}
-          </h3>
-          <p className="text-xs text-mist/70 mt-1 leading-relaxed max-w-[300px] hidden lg:block">
-            {card.body}
-          </p>
-        </div>
-
-        {/* Right: hex data stream */}
-        <div className="relative z-10 flex-1 overflow-hidden">
-          {/* Stream container */}
-          <div className="relative flex items-center gap-px">
             {/* Exposed data indicator */}
             <div
               className={`
-                flex-shrink-0 mr-3 px-2 py-0.5 rounded text-[9px] uppercase tracking-widest font-mono
+                ml-auto px-2 py-0.5 rounded text-[9px] uppercase tracking-widest font-mono
                 border transition-all duration-700
                 ${
                   rowActive
@@ -228,20 +213,23 @@ function DataStreamRow({
             >
               {rowActive ? "EXPOSED" : "IDLE"}
             </div>
-
-            {/* Hex characters */}
-            <div className="flex gap-[2px] flex-wrap sm:flex-nowrap">
-              {cells}
-            </div>
-
-            {/* Fade out right edge */}
-            <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-abyss/80 to-transparent pointer-events-none" />
           </div>
-
-          {/* Mobile: show body text */}
-          <p className="text-xs text-mist/60 mt-2 leading-relaxed lg:hidden">
+          <h3 className="font-display font-semibold text-base text-cloud leading-snug">
+            {card.title}
+          </h3>
+          <p className="text-xs text-mist/70 mt-1 leading-relaxed">
             {card.body}
           </p>
+        </div>
+
+        {/* Bottom: hex data stream — full width, centered */}
+        <div className="relative z-10 overflow-hidden">
+          <div className="relative flex items-center justify-center gap-[2px]">
+            {cells}
+            {/* Fade edges */}
+            <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-abyss/60 to-transparent pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-abyss/60 to-transparent pointer-events-none" />
+          </div>
         </div>
       </div>
     </motion.div>
